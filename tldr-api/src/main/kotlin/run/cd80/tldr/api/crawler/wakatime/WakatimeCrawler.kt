@@ -34,7 +34,7 @@ class WakatimeCrawler constructor(
                 GetTaskRecord.Result(
                     project = duration.project,
                     duration = duration.duration,
-                    workedDateTime = LocalDateTime.ofEpochSecond(duration.time.toLong(), 0, ZoneOffset.UTC)
+                    workedDateTime = LocalDateTime.ofEpochSecond(duration.time.toLong(), 0, ZoneOffset.UTC),
                 )
             }
         } catch (e: Exception) {
