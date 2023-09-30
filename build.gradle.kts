@@ -26,6 +26,12 @@ allprojects {
 subprojects {
     apply(plugin = "kotlin")
 
+    dependencies {
+        implementation(kotlin("stdlib-jdk8"))
+        testImplementation(kotlin("test-junit5"))
+        testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
+    }
+
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs += "-Xjsr305=strict"
