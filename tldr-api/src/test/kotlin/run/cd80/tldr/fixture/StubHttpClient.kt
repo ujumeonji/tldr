@@ -1,7 +1,5 @@
 package run.cd80.tldr.fixture
 
-import org.testcontainers.shaded.com.google.common.collect.ImmutableList
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
 import run.cd80.tldr.core.http.HttpClient
 import run.cd80.tldr.core.http.HttpClientOption
 import run.cd80.tldr.core.http.dto.HttpResponse

@@ -62,7 +62,7 @@ class FuelHttpClient : HttpClient, HttpClientOption {
             parameters = queryParam.toList(),
             method = method.toString(),
             body = body.toString(),
-            headers = header
+            headers = header,
         ).let {
             HttpResponse(
                 statusCode = it.statusCode,

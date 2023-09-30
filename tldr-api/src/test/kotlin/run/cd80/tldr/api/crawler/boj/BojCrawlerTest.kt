@@ -13,7 +13,10 @@ class BojCrawlerTest : BehaviorSpec({
         val httpClient = StubHttpClient()
         val username = "cd80"
         val command = GetSolutions.Command(username)
-        httpClient.addResponse(HttpResponse(200, """
+        httpClient.addResponse(
+            HttpResponse(
+                200,
+                """
 <table class="table table-striped table-bordered" id="status-table">
     <thead>
         <tr>
@@ -42,7 +45,9 @@ class BojCrawlerTest : BehaviorSpec({
         </tr>
     </tbody>
 </table>
-        """.trimIndent()))
+                """.trimIndent(),
+            ),
+        )
 
         `when`("getSolutionsByUser") {
             val results = BojCrawler(httpClient).getSolution(command)

@@ -15,7 +15,8 @@ class WakatimeCrawlerTest : BehaviorSpec({
         val command = GetTaskRecord.Command("test-api-key", nowDate)
         httpClient.addResponse(
             HttpResponse(
-                200, """
+                200,
+                """
             {
               "data": [
                 {
@@ -35,8 +36,8 @@ class WakatimeCrawlerTest : BehaviorSpec({
               "start": "2023-09-25T15:00:00Z",
               "timezone": "Asia/Seoul"
             }
-        """.trimIndent()
-            )
+                """.trimIndent(),
+            ),
         )
 
         `when`("getDurations를 호출한 경우") {
