@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: 'default'
+
+github:
+  client-id: '8c0d1fe04a0fecc82f7a'
+  client-secret: '34dbd68a05e3ef0f61b09ad96c5f2536988bd80d'
+  redirect-uri: 'https://tldr.cd80.run/oauth/github'
+  scopes: [ 'repo' ]
