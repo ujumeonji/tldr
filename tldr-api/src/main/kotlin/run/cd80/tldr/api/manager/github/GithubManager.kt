@@ -33,6 +33,22 @@ class GithubManager(
             ?: GithubAccessToken.EMPTY
     }
 
+    suspend fun getReference(
+        branch: String,
+        repository: GitRepository,
+        accessToken: GithubAccessToken,
+    ): GetReferenceResponse {
+        val response = httpClientFactory
+            .create()
+            .get("https://api.github.com/repos/${repository.getFullName()}/git/ref/heads/$branch")
+            .header("Accept", "application/vnd.github.v3+json")
+            .header("Content-Type", "application/json; charset=utf-8")
+            .header("Authorization", "token $accessToken")
+            .execute()
+
+        return Gson().fromJson(response.body, GetReferenceResponse::class.java)
+    }
+
     companion object {
 
         private const val GITHUB_ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token"
