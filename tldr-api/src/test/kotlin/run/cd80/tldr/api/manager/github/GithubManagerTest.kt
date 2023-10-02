@@ -9,7 +9,9 @@ import run.cd80.tldr.api.manager.github.dto.CreateTree
 import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
 import run.cd80.tldr.api.manager.github.dto.UpdateHead
 import run.cd80.tldr.api.manager.github.dto.UploadFile
+import run.cd80.tldr.api.manager.github.vo.GitCommit
 import run.cd80.tldr.api.manager.github.vo.GitRepository
+import run.cd80.tldr.api.manager.github.vo.GitTree
 import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
 import run.cd80.tldr.api.manager.github.vo.GithubCode
 import run.cd80.tldr.core.http.dto.HttpResponse
@@ -273,7 +275,7 @@ class GithubManagerTest : DescribeSpec({
             val result = githubManager.createCommit(
                 CreateCommit.Command(
                     "test-message",
-                    "test-tree",
+                    GitTree.SHA("test-tree"),
                     listOf("test-parent"),
                 ),
                 GitRepository.of("test", "repo"),
@@ -329,7 +331,7 @@ class GithubManagerTest : DescribeSpec({
             val result = githubManager.updateHead(
                 UpdateHead.Command(
                     "test-branch",
-                    "test-sha",
+                    GitCommit.SHA("test-sha"),
                     true,
                 ),
                 GitRepository.of("test", "repo"),
@@ -351,9 +353,9 @@ class GithubManagerTest : DescribeSpec({
             val testClient = GithubManager(
                 fuelHttpClientFactory,
                 GithubConfig().apply {
-                    clientId = "8c0d1fe04a0fecc82f7a"
-                    clientSecret = "34dbd68a05e3ef0f61b09ad96c5f2536988bd80d"
-                    redirectUri = "http://test:8080"
+                    clientId = "test-client-id"
+                    clientSecret = "test-client-secret"
+                    redirectUri = "test-redirect-uri"
                     scopes = listOf("repo")
                 },
             )
@@ -361,11 +363,11 @@ class GithubManagerTest : DescribeSpec({
             testClient.uploadFile(
                 UploadFile.Command(
                     "커밋 테스트",
-                    "Hello, World!!",
+                    "Hello, World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
                     "main",
-                    "README.md",
+                    "test/README.md",
                 ),
-                GitRepository.of("dygma0", "git-test"),
+                GitRepository.of("test", "git-test"),
                 GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             );
         }

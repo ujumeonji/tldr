@@ -14,7 +14,10 @@ import run.cd80.tldr.api.manager.github.response.CreateCommitResponse
 import run.cd80.tldr.api.manager.github.response.CreateTreeResponse
 import run.cd80.tldr.api.manager.github.response.GetReferenceResponse
 import run.cd80.tldr.api.manager.github.response.UpdateHeadResponse
+import run.cd80.tldr.api.manager.github.vo.GitBlob
+import run.cd80.tldr.api.manager.github.vo.GitCommit
 import run.cd80.tldr.api.manager.github.vo.GitRepository
+import run.cd80.tldr.api.manager.github.vo.GitTree
 import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
 import run.cd80.tldr.api.manager.github.vo.GithubCode
 import run.cd80.tldr.core.http.HttpClientFactory
@@ -40,7 +43,7 @@ class GithubManager(
                 baseTree = reference.`object`.sha,
                 trees = listOf(
                     CreateTreeItem(
-                        sha = blob.sha,
+                        sha = GitBlob.SHA(blob.sha),
                         path = command.path,
                     ),
                 ),
@@ -51,7 +54,7 @@ class GithubManager(
         val commit = createCommit(
             CreateCommit.Command(
                 message = command.message,
-                tree = tree.sha,
+                tree = GitTree.SHA(tree.sha),
                 parents = listOf(reference.`object`.sha),
             ),
             repository,
@@ -60,7 +63,7 @@ class GithubManager(
         updateHead(
             UpdateHead.Command(
                 branch = command.branch,
-                sha = commit.sha,
+                sha = GitCommit.SHA(commit.sha),
                 force = true,
             ),
             repository,
@@ -102,7 +105,7 @@ class GithubManager(
             .header("Authorization", "Bearer $accessToken")
             .body(
                 mapOf(
-                    "sha" to command.sha,
+                    "sha" to command.sha.toString(),
                     "force" to command.force,
                 ),
             )
@@ -125,7 +128,7 @@ class GithubManager(
             .body(
                 mapOf(
                     "message" to command.message,
-                    "tree" to command.tree,
+                    "tree" to command.tree.toString(),
                     "parents" to command.parents,
                 ),
             )

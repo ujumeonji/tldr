@@ -1,7 +1,9 @@
 package run.cd80.tldr.api.manager.github.dto
 
+import run.cd80.tldr.api.manager.github.vo.GitBlob
+
 data class CreateTreeItem(
-    val sha: String,
+    val sha: GitBlob.SHA,
     val path: String,
     val mode: String = "100644",
     val type: String = "blob",
@@ -11,13 +13,13 @@ data class CreateTreeItem(
         "path" to path,
         "mode" to mode,
         "type" to type,
-        "sha" to sha,
+        "sha" to sha.toString(),
     )
 
     companion object {
 
         fun of(path: String, mode: String, type: String, sha: String): CreateTreeItem {
-            return CreateTreeItem(sha, path, mode, type)
+            return CreateTreeItem(GitBlob.SHA(sha), path, mode, type)
         }
     }
 }
