@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import run.cd80.tldr.api.config.GithubConfig
 import run.cd80.tldr.api.manager.github.dto.CreateBlob
+import run.cd80.tldr.api.manager.github.dto.CreateCommit
 import run.cd80.tldr.api.manager.github.dto.CreateTree
 import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
 import run.cd80.tldr.api.manager.github.vo.GitRepository
@@ -216,6 +217,87 @@ class GithubManagerTest : DescribeSpec({
             result.tree[2].type shouldBe "tree"
             result.tree[2].sha shouldBe "385a1b1e60aba9a68e7e1d0fc447290b027bcb26"
             result.tree[2].url shouldBe "https://api.github.com/repos/dygma0/git-test/git/trees/385a1b1e60aba9a68e7e1d0fc447290b027bcb26"
+        }
+    }
+
+    describe("createCommit") {
+
+        it("commit 정보를 생성한다.") {
+            // given
+            httpClient.addResponse(
+                HttpResponse(
+                    200,
+                    """
+                        {
+                          "sha": "4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4",
+                          "node_id": "C_kwDOKa3xU9oAKDRlYjI2ZTBmNDcwNTliMjIyYTRhNDRjMGNiZDZjOGI0N2QxOTk4ZDQ",
+                          "url": "https://api.github.com/repos/dygma0/git-test/git/commits/4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4",
+                          "html_url": "https://github.com/dygma0/git-test/commit/4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4",
+                          "author": {
+                            "name": "dunno",
+                            "email": "72547111+dygma0@users.noreply.github.com",
+                            "date": "2023-10-02T09:38:23Z"
+                          },
+                          "committer": {
+                            "name": "dunno",
+                            "email": "72547111+dygma0@users.noreply.github.com",
+                            "date": "2023-10-02T09:38:23Z"
+                          },
+                          "tree": {
+                            "sha": "7f967255cf28971fea9682b37b8e313338521c75",
+                            "url": "https://api.github.com/repos/dygma0/git-test/git/trees/7f967255cf28971fea9682b37b8e313338521c75"
+                          },
+                          "message": "[Bronze V] Title: A-B, Time: 0 ms, Memory: 13024 KB -BaekjoonHub",
+                          "parents": [
+                            {
+                              "sha": "66123797e35e9c10e7e7de91a15105a6c74c50c1",
+                              "url": "https://api.github.com/repos/dygma0/git-test/git/commits/66123797e35e9c10e7e7de91a15105a6c74c50c1",
+                              "html_url": "https://github.com/dygma0/git-test/commit/66123797e35e9c10e7e7de91a15105a6c74c50c1"
+                            }
+                          ],
+                          "verification": {
+                            "verified": false,
+                            "reason": "unsigned",
+                            "signature": null,
+                            "payload": null
+                          }
+                        }
+                    """.trimIndent(),
+                ),
+            )
+
+            // when
+            val result = githubManager.createCommit(
+                CreateCommit.Command(
+                    "test-message",
+                    "test-tree",
+                    listOf("test-parent"),
+                ),
+                GitRepository.of("test/repo"),
+                GithubAccessToken.of("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"),
+            )
+
+            // then
+            result.sha shouldBe "4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
+            result.url shouldBe "https://api.github.com/repos/dygma0/git-test/git/commits/4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
+            result.htmlUrl shouldBe "https://github.com/dygma0/git-test/commit/4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
+            result.author.name shouldBe "dunno"
+            result.author.email shouldBe "72547111+dygma0@users.noreply.github.com"
+            result.author.date shouldBe "2023-10-02T09:38:23Z"
+            result.committer.name shouldBe "dunno"
+            result.committer.email shouldBe "72547111+dygma0@users.noreply.github.com"
+            result.committer.date shouldBe "2023-10-02T09:38:23Z"
+            result.tree.sha shouldBe "7f967255cf28971fea9682b37b8e313338521c75"
+            result.tree.url shouldBe "https://api.github.com/repos/dygma0/git-test/git/trees/7f967255cf28971fea9682b37b8e313338521c75"
+            result.message shouldBe "[Bronze V] Title: A-B, Time: 0 ms, Memory: 13024 KB -BaekjoonHub"
+            result.parents.size shouldBe 1
+            result.parents[0].sha shouldBe "66123797e35e9c10e7e7de91a15105a6c74c50c1"
+            result.parents[0].url shouldBe "https://api.github.com/repos/dygma0/git-test/git/commits/66123797e35e9c10e7e7de91a15105a6c74c50c1"
+            result.parents[0].htmlUrl shouldBe "https://github.com/dygma0/git-test/commit/66123797e35e9c10e7e7de91a15105a6c74c50c1"
+            result.verification.verified shouldBe false
+            result.verification.reason shouldBe "unsigned"
+            result.verification.signature shouldBe null
+            result.verification.payload shouldBe null
         }
     }
 })
