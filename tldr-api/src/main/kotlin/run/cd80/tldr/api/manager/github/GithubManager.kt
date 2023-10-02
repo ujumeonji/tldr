@@ -33,6 +33,28 @@ class GithubManager(
             ?: GithubAccessToken.EMPTY
     }
 
+    suspend fun createBlob(
+        command: CreateBlob.Command,
+        repository: GitRepository,
+        accessToken: GithubAccessToken,
+    ): CreateBlobResponse {
+        val response = httpClientFactory
+            .create()
+            .post("https://api.github.com/repos/${repository.getFullName()}/git/blobs")
+            .header("Accept", "application/vnd.github.v3+json")
+            .header("Content-Type", "application/json; charset=utf-8")
+            .header("Authorization", "token $accessToken")
+            .body(
+                mapOf(
+                    "content" to command.base64Encode(),
+                    "encoding" to "base64",
+                ),
+            )
+            .execute()
+
+        return Gson().fromJson(response.body, CreateBlobResponse::class.java)
+    }
+
     suspend fun getReference(
         branch: String,
         repository: GitRepository,
