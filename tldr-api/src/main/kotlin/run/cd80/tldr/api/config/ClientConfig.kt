@@ -4,16 +4,15 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import run.cd80.tldr.core.calendar.Calendar
 import run.cd80.tldr.core.calendar.impl.StandardCalendar
-import run.cd80.tldr.core.http.HttpClient
-import run.cd80.tldr.core.http.impl.FuelHttpClient
+import run.cd80.tldr.core.http.HttpClientFactory
+import run.cd80.tldr.core.http.impl.FuelHttpClientFactory
 
 @Configuration
 class ClientConfig {
 
     @Bean
-    fun httpClient(): HttpClient {
-        return FuelHttpClient()
-    }
+    fun httpClientFactory(): HttpClientFactory =
+        FuelHttpClientFactory()
 
     @Bean
     fun calendar(): Calendar {

@@ -1,5 +1,6 @@
 package run.cd80.tldr.core.http.impl
 
+import com.google.gson.Gson
 import fuel.httpMethod
 import run.cd80.tldr.core.http.HttpClient
 import run.cd80.tldr.core.http.HttpClientOption
@@ -12,11 +13,11 @@ class FuelHttpClient : HttpClient, HttpClientOption {
 
     private lateinit var method: HttpMethod
 
-    private val queryParam = mutableMapOf<String, String>()
-
     private val header = mutableMapOf<String, String>()
 
-    private val body = mutableMapOf<String, String>()
+    private val queryParam = mutableMapOf<String, String>()
+
+    private lateinit var body: String
 
     override fun get(url: String): HttpClientOption =
         apply {
@@ -54,14 +55,14 @@ class FuelHttpClient : HttpClient, HttpClientOption {
     override fun header(key: String, value: String): HttpClientOption =
         apply { header[key] = value }
 
-    override fun body(body: String): HttpClientOption =
-        apply { this.body["body"] = body }
+    override fun body(jsonBody: Map<String, Any>): HttpClientOption =
+        apply { this.body = Gson().toJson(jsonBody) }
 
     override suspend fun execute() =
         url.httpMethod(
             parameters = queryParam.toList(),
             method = method.toString(),
-            body = body.toString(),
+            body = body,
             headers = header,
         ).let {
             HttpResponse(

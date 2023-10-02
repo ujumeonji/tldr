@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import run.cd80.tldr.api.crawler.wakatime.dto.GetTaskRecord
 import run.cd80.tldr.core.http.dto.HttpResponse
 import run.cd80.tldr.fixture.StubHttpClient
+import run.cd80.tldr.fixture.StubHttpClientFactory
 import java.time.LocalDate
 
 class WakatimeCrawlerTest : BehaviorSpec({
@@ -41,7 +42,7 @@ class WakatimeCrawlerTest : BehaviorSpec({
         )
 
         `when`("getDurations를 호출한 경우") {
-            val results = WakatimeCrawler(httpClient).getTaskRecords(command)
+            val results = WakatimeCrawler(StubHttpClientFactory(httpClient)).getTaskRecords(command)
 
             then("작업 내역을 전달받는다.") {
                 httpClient.url shouldBe "https://wakatime.com/api/v1/users/current/durations"
