@@ -7,10 +7,12 @@ import run.cd80.tldr.api.manager.github.dto.CreateBlob
 import run.cd80.tldr.api.manager.github.dto.CreateCommit
 import run.cd80.tldr.api.manager.github.dto.CreateTree
 import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
+import run.cd80.tldr.api.manager.github.dto.UpdateHead
 import run.cd80.tldr.api.manager.github.response.CreateBlobResponse
 import run.cd80.tldr.api.manager.github.response.CreateCommitResponse
 import run.cd80.tldr.api.manager.github.response.CreateTreeResponse
 import run.cd80.tldr.api.manager.github.response.GetReferenceResponse
+import run.cd80.tldr.api.manager.github.response.UpdateHeadResponse
 import run.cd80.tldr.api.manager.github.vo.GitRepository
 import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
 import run.cd80.tldr.api.manager.github.vo.GithubCode
@@ -41,6 +43,25 @@ class GithubManager(
             ?.groupValues?.get(1)
             ?.let(GithubAccessToken::of)
             ?: GithubAccessToken.EMPTY
+    }
+
+    suspend fun updateHead(
+        command: UpdateHead.Command,
+        repository: GitRepository,
+        accessToken: GithubAccessToken,
+    ): UpdateHeadResponse {
+        val response = httpClientFactory
+            .create()
+            .patch("https://api.github.com/repos/${repository.getFullName()}/git/refs/heads/${command.branch}")
+            .body(
+                mapOf(
+                    "sha" to command.sha,
+                    "force" to command.force,
+                ),
+            )
+            .execute()
+
+        return Gson().fromJson(response.body, UpdateHeadResponse::class.java)
     }
 
     suspend fun createCommit(
