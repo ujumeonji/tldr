@@ -12,4 +12,13 @@ class UpdateHeadResponse {
     val nodeId: String = ""
 
     val `object`: UpdateHeadObjectResponse = UpdateHeadObjectResponse()
+
+    class UpdateHeadObjectResponse {
+
+        val sha: String = ""
+
+        val type: String = ""
+
+        val url: String = ""
+    }
 }

@@ -53,6 +53,9 @@ class GithubManager(
         val response = httpClientFactory
             .create()
             .patch("https://api.github.com/repos/${repository.getFullName()}/git/refs/heads/${command.branch}")
+            .header("Accept", "application/vnd.github.v3+json")
+            .header("Content-Type", "application/json; charset=utf-8")
+            .header("Authorization", "Bearer $accessToken")
             .body(
                 mapOf(
                     "sha" to command.sha,
