@@ -4,7 +4,7 @@ import java.util.*
 
 object CreateBlob {
 
-    data class Command(val content: String, val path: String, val encoding: String = "utf-8") {
+    data class Command(val content: String, val path: String, val encoding: String = "base64") {
 
         init {
             require(content.isNotBlank()) { "content must not be blank" }

@@ -8,9 +8,8 @@ data class GitRepository(private val name: String, private val owner: String) {
 
     companion object {
 
-        fun of(fullName: String): GitRepository {
-            val split = fullName.split("/")
-            return GitRepository(split[1], split[0])
+        fun of(owner: String, repo: String): GitRepository {
+            return GitRepository(repo, owner)
         }
     }
 }

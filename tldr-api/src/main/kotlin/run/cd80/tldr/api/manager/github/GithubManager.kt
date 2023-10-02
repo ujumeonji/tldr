@@ -8,12 +8,16 @@ import run.cd80.tldr.api.manager.github.dto.CreateCommit
 import run.cd80.tldr.api.manager.github.dto.CreateTree
 import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
 import run.cd80.tldr.api.manager.github.dto.UpdateHead
+import run.cd80.tldr.api.manager.github.dto.UploadFile
 import run.cd80.tldr.api.manager.github.response.CreateBlobResponse
 import run.cd80.tldr.api.manager.github.response.CreateCommitResponse
 import run.cd80.tldr.api.manager.github.response.CreateTreeResponse
 import run.cd80.tldr.api.manager.github.response.GetReferenceResponse
 import run.cd80.tldr.api.manager.github.response.UpdateHeadResponse
+import run.cd80.tldr.api.manager.github.vo.GitBlob
+import run.cd80.tldr.api.manager.github.vo.GitCommit
 import run.cd80.tldr.api.manager.github.vo.GitRepository
+import run.cd80.tldr.api.manager.github.vo.GitTree
 import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
 import run.cd80.tldr.api.manager.github.vo.GithubCode
 import run.cd80.tldr.core.http.HttpClientFactory
@@ -23,6 +27,49 @@ class GithubManager(
     private val httpClientFactory: HttpClientFactory,
     private val githubConfig: GithubConfig,
 ) {
+
+    suspend fun uploadFile(command: UploadFile.Command, repository: GitRepository, accessToken: GithubAccessToken) {
+        val reference = getReference(command.branch, repository, accessToken)
+        val blob = createBlob(
+            CreateBlob.Command(
+                content = command.content,
+                path = command.path,
+            ),
+            repository,
+            accessToken,
+        )
+        val tree = createTree(
+            CreateTree.Command(
+                baseTree = reference.`object`.sha,
+                trees = listOf(
+                    CreateTreeItem(
+                        sha = GitBlob.SHA(blob.sha),
+                        path = command.path,
+                    ),
+                ),
+            ),
+            repository,
+            accessToken,
+        )
+        val commit = createCommit(
+            CreateCommit.Command(
+                message = command.message,
+                tree = GitTree.SHA(tree.sha),
+                parents = listOf(reference.`object`.sha),
+            ),
+            repository,
+            accessToken,
+        )
+        updateHead(
+            UpdateHead.Command(
+                branch = command.branch,
+                sha = GitCommit.SHA(commit.sha),
+                force = true,
+            ),
+            repository,
+            accessToken,
+        )
+    }
 
     suspend fun getAccessToken(code: GithubCode): GithubAccessToken {
         val response = httpClientFactory
@@ -58,7 +105,7 @@ class GithubManager(
             .header("Authorization", "Bearer $accessToken")
             .body(
                 mapOf(
-                    "sha" to command.sha,
+                    "sha" to command.sha.toString(),
                     "force" to command.force,
                 ),
             )
@@ -81,7 +128,7 @@ class GithubManager(
             .body(
                 mapOf(
                     "message" to command.message,
-                    "tree" to command.tree,
+                    "tree" to command.tree.toString(),
                     "parents" to command.parents,
                 ),
             )
@@ -103,7 +150,7 @@ class GithubManager(
             .header("Authorization", "Bearer $accessToken")
             .body(
                 mapOf(
-                    "base_tree" to command.baseTreeSHA,
+                    "base_tree" to command.baseTree,
                     "tree" to command.trees.map(CreateTreeItem::toMap),
                 ),
             )

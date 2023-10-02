@@ -8,10 +8,14 @@ import run.cd80.tldr.api.manager.github.dto.CreateCommit
 import run.cd80.tldr.api.manager.github.dto.CreateTree
 import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
 import run.cd80.tldr.api.manager.github.dto.UpdateHead
+import run.cd80.tldr.api.manager.github.dto.UploadFile
+import run.cd80.tldr.api.manager.github.vo.GitCommit
 import run.cd80.tldr.api.manager.github.vo.GitRepository
+import run.cd80.tldr.api.manager.github.vo.GitTree
 import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
 import run.cd80.tldr.api.manager.github.vo.GithubCode
 import run.cd80.tldr.core.http.dto.HttpResponse
+import run.cd80.tldr.core.http.impl.FuelHttpClientFactory
 import run.cd80.tldr.fixture.StubHttpClient
 import run.cd80.tldr.fixture.StubHttpClientFactory
 
@@ -39,7 +43,7 @@ class GithubManagerTest : DescribeSpec({
             httpClient.addResponse(
                 HttpResponse(
                     200,
-                    "access_token=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&scope=repo&token_type=bearer",
+                    "access_token=gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&scope=repo&token_type=bearer",
                 ),
             )
 
@@ -47,7 +51,7 @@ class GithubManagerTest : DescribeSpec({
             val result = githubManager.getAccessToken(GithubCode.of("test-code"))
 
             // then
-            result shouldBe GithubAccessToken.of("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")
+            result shouldBe GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
         }
     }
 
@@ -75,8 +79,8 @@ class GithubManagerTest : DescribeSpec({
             // when
             val result = githubManager.getReference(
                 "test-repository",
-                GitRepository.of("test/repo"),
-                GithubAccessToken.of("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"),
+                GitRepository.of("test", "repo"),
+                GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
 
             // then
@@ -107,8 +111,8 @@ class GithubManagerTest : DescribeSpec({
             // when
             val result = githubManager.createBlob(
                 CreateBlob.Command("test-content", "repo/path", "test-encoding"),
-                GitRepository.of("test/repo"),
-                GithubAccessToken.of("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"),
+                GitRepository.of("test", "repo"),
+                GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
 
             // then
@@ -135,8 +139,8 @@ class GithubManagerTest : DescribeSpec({
             // when
             val result = githubManager.createBlob(
                 CreateBlob.Command("test-content", "repo/path", "test-encoding"),
-                GitRepository.of("test/repo"),
-                GithubAccessToken.of("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"),
+                GitRepository.of("test", "repo"),
+                GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
 
             // then
@@ -193,8 +197,8 @@ class GithubManagerTest : DescribeSpec({
                         CreateTreeItem.of("test-path", "test-mode", "test-type", "test-sha"),
                     ),
                 ),
-                GitRepository.of("test/repo"),
-                GithubAccessToken.of("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"),
+                GitRepository.of("test", "repo"),
+                GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
 
             // then
@@ -271,11 +275,11 @@ class GithubManagerTest : DescribeSpec({
             val result = githubManager.createCommit(
                 CreateCommit.Command(
                     "test-message",
-                    "test-tree",
+                    GitTree.SHA("test-tree"),
                     listOf("test-parent"),
                 ),
-                GitRepository.of("test/repo"),
-                GithubAccessToken.of("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"),
+                GitRepository.of("test", "repo"),
+                GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
 
             // then
@@ -327,11 +331,11 @@ class GithubManagerTest : DescribeSpec({
             val result = githubManager.updateHead(
                 UpdateHead.Command(
                     "test-branch",
-                    "test-sha",
+                    GitCommit.SHA("test-sha"),
                     true,
                 ),
-                GitRepository.of("test/repo"),
-                GithubAccessToken.of("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"),
+                GitRepository.of("test", "repo"),
+                GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
 
             // then
@@ -340,6 +344,32 @@ class GithubManagerTest : DescribeSpec({
             result.`object`.sha shouldBe "4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
             result.`object`.type shouldBe "commit"
             result.`object`.url shouldBe "https://api.github.com/repos/dygma0/git-test/git/commits/4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
+        }
+    }
+
+    xdescribe("FuelHttpClient") {
+        it("integration test") {
+            val fuelHttpClientFactory = FuelHttpClientFactory()
+            val testClient = GithubManager(
+                fuelHttpClientFactory,
+                GithubConfig().apply {
+                    clientId = "test-client-id"
+                    clientSecret = "test-client-secret"
+                    redirectUri = "test-redirect-uri"
+                    scopes = listOf("repo")
+                },
+            )
+
+            testClient.uploadFile(
+                UploadFile.Command(
+                    "커밋 테스트",
+                    "Hello, World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+                    "main",
+                    "test/README.md",
+                ),
+                GitRepository.of("test", "git-test"),
+                GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+            );
         }
     }
 })

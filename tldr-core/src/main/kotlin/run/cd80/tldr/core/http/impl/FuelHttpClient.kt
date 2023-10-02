@@ -9,15 +9,15 @@ import kotlin.collections.set
 
 class FuelHttpClient : HttpClient, HttpClientOption {
 
-    private lateinit var url: String
+    private var url: String = ""
 
-    private lateinit var method: HttpMethod
+    private var method: HttpMethod = HttpMethod.GET
 
     private val header = mutableMapOf<String, String>()
 
     private val queryParam = mutableMapOf<String, String>()
 
-    private lateinit var body: String
+    private var body: String = ""
 
     override fun get(url: String): HttpClientOption =
         apply {
