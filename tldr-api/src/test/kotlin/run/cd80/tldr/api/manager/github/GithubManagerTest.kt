@@ -7,6 +7,7 @@ import run.cd80.tldr.api.manager.github.dto.CreateBlob
 import run.cd80.tldr.api.manager.github.dto.CreateCommit
 import run.cd80.tldr.api.manager.github.dto.CreateTree
 import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
+import run.cd80.tldr.api.manager.github.dto.UpdateHead
 import run.cd80.tldr.api.manager.github.vo.GitRepository
 import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
 import run.cd80.tldr.api.manager.github.vo.GithubCode
@@ -298,6 +299,47 @@ class GithubManagerTest : DescribeSpec({
             result.verification.reason shouldBe "unsigned"
             result.verification.signature shouldBe null
             result.verification.payload shouldBe null
+        }
+    }
+
+    describe("updateHead") {
+
+        it("haed 정보를 갱신한다.") {
+            // given
+            httpClient.addResponse(
+                HttpResponse(
+                    200,
+                    """
+                        {
+                          "ref": "refs/heads/main",
+                          "url": "https://api.github.com/repos/dygma0/git-test/git/refs/heads/main",
+                          "object": {
+                            "sha": "4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4",
+                            "type": "commit",
+                            "url": "https://api.github.com/repos/dygma0/git-test/git/commits/4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
+                          }
+                        }
+                    """.trimIndent(),
+                ),
+            )
+
+            // when
+            val result = githubManager.updateHead(
+                UpdateHead.Command(
+                    "test-branch",
+                    "test-sha",
+                    true,
+                ),
+                GitRepository.of("test/repo"),
+                GithubAccessToken.of("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"),
+            )
+
+            // then
+            result.ref shouldBe "refs/heads/main"
+            result.url shouldBe "https://api.github.com/repos/dygma0/git-test/git/refs/heads/main"
+            result.`object`.sha shouldBe "4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
+            result.`object`.type shouldBe "commit"
+            result.`object`.url shouldBe "https://api.github.com/repos/dygma0/git-test/git/commits/4eb26e0f47059b222a4a44c0cbd6c8b47d1998d4"
         }
     }
 })
