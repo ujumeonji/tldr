@@ -1,7 +1,17 @@
 package run.cd80.tldr.api.manager.github
 
+import com.google.gson.Gson
 import org.springframework.stereotype.Component
 import run.cd80.tldr.api.config.GithubConfig
+import run.cd80.tldr.api.manager.github.dto.CreateBlob
+import run.cd80.tldr.api.manager.github.dto.CreateCommit
+import run.cd80.tldr.api.manager.github.dto.CreateTree
+import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
+import run.cd80.tldr.api.manager.github.response.CreateBlobResponse
+import run.cd80.tldr.api.manager.github.response.CreateCommitResponse
+import run.cd80.tldr.api.manager.github.response.CreateTreeResponse
+import run.cd80.tldr.api.manager.github.response.GetReferenceResponse
+import run.cd80.tldr.api.manager.github.vo.GitRepository
 import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
 import run.cd80.tldr.api.manager.github.vo.GithubCode
 import run.cd80.tldr.core.http.HttpClientFactory
@@ -31,6 +41,29 @@ class GithubManager(
             ?.groupValues?.get(1)
             ?.let(GithubAccessToken::of)
             ?: GithubAccessToken.EMPTY
+    }
+
+    suspend fun createCommit(
+        command: CreateCommit.Command,
+        repository: GitRepository,
+        accessToken: GithubAccessToken,
+    ): CreateCommitResponse {
+        val response = httpClientFactory
+            .create()
+            .post("https://api.github.com/repos/${repository.getFullName()}/git/commits")
+            .header("Accept", "application/vnd.github.v3+json")
+            .header("Content-Type", "application/json; charset=utf-8")
+            .header("Authorization", "Bearer $accessToken")
+            .body(
+                mapOf(
+                    "message" to command.message,
+                    "tree" to command.tree,
+                    "parents" to command.parents,
+                ),
+            )
+            .execute()
+
+        return Gson().fromJson(response.body, CreateCommitResponse::class.java)
     }
 
     suspend fun createTree(
