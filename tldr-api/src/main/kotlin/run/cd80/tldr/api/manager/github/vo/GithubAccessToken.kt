@@ -1,6 +1,9 @@
 package run.cd80.tldr.api.manager.github.vo
 
-data class GithubAccessToken(val value: String) {
+data class GithubAccessToken(private val value: String) {
+
+    override fun toString(): String =
+        value
 
     companion object {
 
