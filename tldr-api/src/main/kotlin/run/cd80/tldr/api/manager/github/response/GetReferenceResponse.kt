@@ -12,4 +12,13 @@ class GetReferenceResponse {
 
     @SerializedName("node_id")
     val nodeId: String = ""
+
+    class GetReferenceObjectResponse {
+
+        val sha: String = ""
+
+        val type: String = ""
+
+        val url: String = ""
+    }
 }
