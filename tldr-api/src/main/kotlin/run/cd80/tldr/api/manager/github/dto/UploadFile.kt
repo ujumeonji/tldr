@@ -7,6 +7,5 @@ object UploadFile {
         val content: String,
         val branch: String,
         val path: String,
-        val sha: String,
     )
 }
