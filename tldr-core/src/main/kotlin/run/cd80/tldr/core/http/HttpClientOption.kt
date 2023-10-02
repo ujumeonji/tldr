@@ -8,7 +8,7 @@ interface HttpClientOption {
 
     fun header(key: String, value: String): HttpClientOption
 
-    fun body(body: String): HttpClientOption
+    fun body(jsonBody: Map<String, Any>): HttpClientOption
 
     suspend fun execute(): HttpResponse
 }

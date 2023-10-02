@@ -1,5 +1,6 @@
 package run.cd80.tldr.fixture
 
+import com.google.gson.Gson
 import run.cd80.tldr.core.http.HttpClient
 import run.cd80.tldr.core.http.HttpClientOption
 import run.cd80.tldr.core.http.dto.HttpResponse
@@ -38,8 +39,8 @@ class StubHttpClient : HttpClient, HttpClientOption {
     override fun header(key: String, value: String): HttpClientOption =
         apply { headerMap[key] = value }
 
-    override fun body(body: String): HttpClientOption =
-        apply { this.body = body }
+    override fun body(jsonBody: Map<String, Any>): HttpClientOption =
+        apply { this.body = Gson().toJson(jsonBody) }
 
     override suspend fun execute(): HttpResponse {
         val response = response.first()
