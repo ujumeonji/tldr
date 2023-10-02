@@ -33,6 +33,28 @@ class GithubManager(
             ?: GithubAccessToken.EMPTY
     }
 
+    suspend fun createTree(
+        command: CreateTree.Command,
+        repository: GitRepository,
+        accessToken: GithubAccessToken,
+    ): CreateTreeResponse {
+        val response = httpClientFactory
+            .create()
+            .post("https://api.github.com/repos/${repository.getFullName()}/git/trees")
+            .header("Accept", "application/vnd.github.v3+json")
+            .header("Content-Type", "application/json; charset=utf-8")
+            .header("Authorization", "Bearer $accessToken")
+            .body(
+                mapOf(
+                    "base_tree" to command.baseTreeSHA,
+                    "tree" to command.trees.map(CreateTreeItem::toMap),
+                ),
+            )
+            .execute()
+
+        return Gson().fromJson(response.body, CreateTreeResponse::class.java)
+    }
+
     suspend fun createBlob(
         command: CreateBlob.Command,
         repository: GitRepository,
@@ -43,7 +65,7 @@ class GithubManager(
             .post("https://api.github.com/repos/${repository.getFullName()}/git/blobs")
             .header("Accept", "application/vnd.github.v3+json")
             .header("Content-Type", "application/json; charset=utf-8")
-            .header("Authorization", "token $accessToken")
+            .header("Authorization", "Bearer $accessToken")
             .body(
                 mapOf(
                     "content" to command.base64Encode(),
@@ -65,7 +87,7 @@ class GithubManager(
             .get("https://api.github.com/repos/${repository.getFullName()}/git/ref/heads/$branch")
             .header("Accept", "application/vnd.github.v3+json")
             .header("Content-Type", "application/json; charset=utf-8")
-            .header("Authorization", "token $accessToken")
+            .header("Authorization", "Bearer $accessToken")
             .execute()
 
         return Gson().fromJson(response.body, GetReferenceResponse::class.java)
