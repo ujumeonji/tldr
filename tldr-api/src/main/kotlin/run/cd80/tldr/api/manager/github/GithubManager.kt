@@ -8,6 +8,7 @@ import run.cd80.tldr.api.manager.github.dto.CreateCommit
 import run.cd80.tldr.api.manager.github.dto.CreateTree
 import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
 import run.cd80.tldr.api.manager.github.dto.UpdateHead
+import run.cd80.tldr.api.manager.github.dto.UploadFile
 import run.cd80.tldr.api.manager.github.response.CreateBlobResponse
 import run.cd80.tldr.api.manager.github.response.CreateCommitResponse
 import run.cd80.tldr.api.manager.github.response.CreateTreeResponse
@@ -23,6 +24,49 @@ class GithubManager(
     private val httpClientFactory: HttpClientFactory,
     private val githubConfig: GithubConfig,
 ) {
+
+    suspend fun uploadFile(command: UploadFile.Command, repository: GitRepository, accessToken: GithubAccessToken) {
+        val reference = getReference(command.branch, repository, accessToken)
+        val blob = createBlob(
+            CreateBlob.Command(
+                content = command.content,
+                path = command.path,
+            ),
+            repository,
+            accessToken,
+        )
+        val tree = createTree(
+            CreateTree.Command(
+                baseTree = reference.`object`.sha,
+                trees = listOf(
+                    CreateTreeItem(
+                        sha = blob.sha,
+                        path = command.path,
+                    ),
+                ),
+            ),
+            repository,
+            accessToken,
+        )
+        val commit = createCommit(
+            CreateCommit.Command(
+                message = command.message,
+                tree = tree.sha,
+                parents = listOf(reference.`object`.sha),
+            ),
+            repository,
+            accessToken,
+        )
+        updateHead(
+            UpdateHead.Command(
+                branch = command.branch,
+                sha = commit.sha,
+                force = true,
+            ),
+            repository,
+            accessToken,
+        )
+    }
 
     suspend fun getAccessToken(code: GithubCode): GithubAccessToken {
         val response = httpClientFactory
@@ -103,7 +147,7 @@ class GithubManager(
             .header("Authorization", "Bearer $accessToken")
             .body(
                 mapOf(
-                    "base_tree" to command.baseTreeSHA,
+                    "base_tree" to command.baseTree,
                     "tree" to command.trees.map(CreateTreeItem::toMap),
                 ),
             )

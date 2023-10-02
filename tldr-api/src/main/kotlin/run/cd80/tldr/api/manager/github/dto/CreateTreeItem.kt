@@ -1,10 +1,10 @@
 package run.cd80.tldr.api.manager.github.dto
 
 data class CreateTreeItem(
-    val path: String,
-    val mode: String,
-    val type: String,
     val sha: String,
+    val path: String,
+    val mode: String = "100644",
+    val type: String = "blob",
 ) {
 
     fun toMap() = mapOf(
@@ -17,7 +17,7 @@ data class CreateTreeItem(
     companion object {
 
         fun of(path: String, mode: String, type: String, sha: String): CreateTreeItem {
-            return CreateTreeItem(path, mode, type, sha)
+            return CreateTreeItem(sha, path, mode, type)
         }
     }
 }
