@@ -2,10 +2,10 @@ package run.cd80.tldr.fixture
 
 import com.google.gson.Gson
 import run.cd80.tldr.core.http.HttpClient
-import run.cd80.tldr.core.http.HttpClientOption
+import run.cd80.tldr.core.http.dto.HttpRequestScopeBuilder
 import run.cd80.tldr.core.http.dto.HttpResponse
 
-class StubHttpClient : HttpClient, HttpClientOption {
+class StubHttpClient : HttpClient {
 
     lateinit var url: String
         private set
@@ -18,34 +18,34 @@ class StubHttpClient : HttpClient, HttpClientOption {
 
     private val response = mutableListOf<HttpResponse>()
 
-    override fun get(url: String): HttpClientOption =
-        apply { this.url = url }
+    override fun get(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse {
+        this.url = url
+        this.body = Gson().toJson(this)
+        return response.first()
+    }
 
-    override fun post(url: String): HttpClientOption =
-        apply { this.url = url }
+    override fun post(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse {
+        this.url = url
+        this.body = Gson().toJson(this)
+        return response.first()
+    }
 
-    override fun put(url: String): HttpClientOption =
-        apply { this.url = url }
+    override fun put(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse {
+        this.url = url
+        this.body = Gson().toJson(this)
+        return response.first()
+    }
 
-    override fun delete(url: String): HttpClientOption =
-        apply { this.url = url }
+    override fun delete(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse {
+        this.url = url
+        this.body = Gson().toJson(this)
+        return response.first()
+    }
 
-    override fun patch(url: String): HttpClientOption =
-        apply { this.url = url }
-
-    override fun queryParam(key: String, value: String): HttpClientOption =
-        apply { queryParamMap[key] = value }
-
-    override fun header(key: String, value: String): HttpClientOption =
-        apply { headerMap[key] = value }
-
-    override fun body(jsonBody: Map<String, Any>): HttpClientOption =
-        apply { this.body = Gson().toJson(jsonBody) }
-
-    override suspend fun execute(): HttpResponse {
-        val response = response.first()
-        this.response.removeFirst()
-        return response
+    override fun patch(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse {
+        this.url = url
+        this.body = Gson().toJson(this)
+        return response.first()
     }
 
     fun addResponse(response: HttpResponse) {

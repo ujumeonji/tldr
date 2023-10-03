@@ -6,7 +6,6 @@ import io.kotest.matchers.shouldBe
 import run.cd80.tldr.api.crawler.boj.dto.GetSolutions
 import run.cd80.tldr.core.http.dto.HttpResponse
 import run.cd80.tldr.fixture.StubHttpClient
-import run.cd80.tldr.fixture.StubHttpClientFactory
 
 class BojCrawlerTest : BehaviorSpec({
 
@@ -51,7 +50,7 @@ class BojCrawlerTest : BehaviorSpec({
         )
 
         `when`("getSolutionsByUser") {
-            val results = BojCrawler(StubHttpClientFactory(httpClient)).getSolution(command)
+            val results = BojCrawler(httpClient).getSolution(command)
 
             then("return document") {
                 results shouldHaveSize 1

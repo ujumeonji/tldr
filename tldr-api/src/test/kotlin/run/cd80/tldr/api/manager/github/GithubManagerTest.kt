@@ -3,28 +3,20 @@ package run.cd80.tldr.api.manager.github
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import run.cd80.tldr.api.config.GithubConfig
-import run.cd80.tldr.api.manager.github.dto.CreateBlob
-import run.cd80.tldr.api.manager.github.dto.CreateCommit
-import run.cd80.tldr.api.manager.github.dto.CreateTree
-import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
-import run.cd80.tldr.api.manager.github.dto.UpdateHead
-import run.cd80.tldr.api.manager.github.dto.UploadFile
-import run.cd80.tldr.api.manager.github.vo.GitCommit
-import run.cd80.tldr.api.manager.github.vo.GitRepository
-import run.cd80.tldr.api.manager.github.vo.GitTree
-import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
-import run.cd80.tldr.api.manager.github.vo.GithubCode
+import run.cd80.tldr.api.manager.github.dto.*
+import run.cd80.tldr.api.manager.github.type.EncodeType
+import run.cd80.tldr.api.manager.github.vo.*
 import run.cd80.tldr.core.http.dto.HttpResponse
-import run.cd80.tldr.core.http.impl.FuelHttpClientFactory
+import run.cd80.tldr.core.http.impl.KtorHttpClient
+import run.cd80.tldr.fixture.StubGitContent
 import run.cd80.tldr.fixture.StubHttpClient
-import run.cd80.tldr.fixture.StubHttpClientFactory
 
 class GithubManagerTest : DescribeSpec({
 
     val httpClient = StubHttpClient()
 
     val githubManager = GithubManager(
-        StubHttpClientFactory(httpClient),
+        httpClient,
         GithubConfig().apply {
             clientId = "test-client-id"
             clientSecret = "test-client-secret"
@@ -110,7 +102,7 @@ class GithubManagerTest : DescribeSpec({
 
             // when
             val result = githubManager.createBlob(
-                CreateBlob.Command("test-content", "repo/path", "test-encoding"),
+                CreateBlob.Command("test-content", "repo/path", EncodeType.BASE64),
                 GitRepository.of("test", "repo"),
                 GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
@@ -138,7 +130,7 @@ class GithubManagerTest : DescribeSpec({
 
             // when
             val result = githubManager.createBlob(
-                CreateBlob.Command("test-content", "repo/path", "test-encoding"),
+                CreateBlob.Command("test-content", "repo/path", EncodeType.BASE64),
                 GitRepository.of("test", "repo"),
                 GithubAccessToken.of("gho_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
             )
@@ -349,9 +341,8 @@ class GithubManagerTest : DescribeSpec({
 
     xdescribe("FuelHttpClient") {
         it("integration test") {
-            val fuelHttpClientFactory = FuelHttpClientFactory()
             val testClient = GithubManager(
-                fuelHttpClientFactory,
+                KtorHttpClient(),
                 GithubConfig().apply {
                     clientId = "test-client-id"
                     clientSecret = "test-client-secret"
@@ -363,7 +354,7 @@ class GithubManagerTest : DescribeSpec({
             testClient.uploadFile(
                 UploadFile.Command(
                     "커밋 테스트",
-                    "Hello, World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+                    StubGitContent(),
                     "main",
                     "test/README.md",
                 ),
