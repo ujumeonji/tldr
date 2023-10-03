@@ -3,75 +3,41 @@ package run.cd80.tldr.core.http.impl
 import com.google.gson.Gson
 import fuel.httpMethod
 import run.cd80.tldr.core.http.HttpClient
-import run.cd80.tldr.core.http.HttpClientOption
+import run.cd80.tldr.core.http.dto.HttpRequestScopeBuilder
 import run.cd80.tldr.core.http.dto.HttpResponse
-import kotlin.collections.set
 
-class FuelHttpClient : HttpClient, HttpClientOption {
+class FuelHttpClient : HttpClient {
 
-    private var url: String = ""
+    override suspend fun get(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+        request("GET", url, block)
 
-    private var method: HttpMethod = HttpMethod.GET
+    override suspend fun post(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+        request("POST", url, block)
 
-    private val header = mutableMapOf<String, String>()
+    override suspend fun put(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+        request("PUT", url, block)
 
-    private val queryParam = mutableMapOf<String, String>()
+    override suspend fun delete(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+        request("DELETE", url, block)
 
-    private var body: String = ""
+    override suspend fun patch(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+        request("PATCH", url, block)
 
-    override fun get(url: String): HttpClientOption =
-        apply {
-            this.url = url
-            this.method = HttpMethod.GET
-        }
+    private suspend fun request(
+        method: String,
+        url: String,
+        block: HttpRequestScopeBuilder.() -> Unit
+    ): HttpResponse {
+        val request = HttpRequestScopeBuilder().apply(block).build()
 
-    override fun post(url: String): HttpClientOption =
-        apply {
-            this.url = url
-            this.method = HttpMethod.POST
-        }
-
-    override fun put(url: String): HttpClientOption =
-        apply {
-            this.url = url
-            this.method = HttpMethod.PUT
-        }
-
-    override fun delete(url: String): HttpClientOption =
-        apply {
-            this.url = url
-            this.method = HttpMethod.DELETE
-        }
-
-    override fun patch(url: String): HttpClientOption =
-        apply {
-            this.url = url
-            this.method = HttpMethod.PATCH
-        }
-
-    override fun queryParam(key: String, value: String): HttpClientOption =
-        apply { queryParam[key] = value }
-
-    override fun header(key: String, value: String): HttpClientOption =
-        apply { header[key] = value }
-
-    override fun body(jsonBody: Map<String, Any>): HttpClientOption =
-        apply { this.body = Gson().toJson(jsonBody) }
-
-    override suspend fun execute() =
-        url.httpMethod(
-            parameters = queryParam.toList(),
-            method = method.toString(),
-            body = body,
-            headers = header,
-        ).let {
-            HttpResponse(
-                statusCode = it.statusCode,
-                body = it.body,
-            )
-        }
-
-    private enum class HttpMethod {
-        GET, POST, PUT, DELETE, PATCH
+        return url
+            .httpMethod(
+                method = method,
+                parameters = request.parameters,
+                headers = request.headers.toMap(),
+                body = Gson().toJson(request.body),
+            ).let {
+                HttpResponse(it.statusCode, it.body)
+            }
     }
 }

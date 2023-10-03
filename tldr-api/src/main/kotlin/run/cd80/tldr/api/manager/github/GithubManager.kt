@@ -3,28 +3,14 @@ package run.cd80.tldr.api.manager.github
 import com.google.gson.Gson
 import org.springframework.stereotype.Component
 import run.cd80.tldr.api.config.GithubConfig
-import run.cd80.tldr.api.manager.github.dto.CreateBlob
-import run.cd80.tldr.api.manager.github.dto.CreateCommit
-import run.cd80.tldr.api.manager.github.dto.CreateTree
-import run.cd80.tldr.api.manager.github.dto.CreateTreeItem
-import run.cd80.tldr.api.manager.github.dto.UpdateHead
-import run.cd80.tldr.api.manager.github.dto.UploadFile
-import run.cd80.tldr.api.manager.github.response.CreateBlobResponse
-import run.cd80.tldr.api.manager.github.response.CreateCommitResponse
-import run.cd80.tldr.api.manager.github.response.CreateTreeResponse
-import run.cd80.tldr.api.manager.github.response.GetReferenceResponse
-import run.cd80.tldr.api.manager.github.response.UpdateHeadResponse
-import run.cd80.tldr.api.manager.github.vo.GitBlob
-import run.cd80.tldr.api.manager.github.vo.GitCommit
-import run.cd80.tldr.api.manager.github.vo.GitRepository
-import run.cd80.tldr.api.manager.github.vo.GitTree
-import run.cd80.tldr.api.manager.github.vo.GithubAccessToken
-import run.cd80.tldr.api.manager.github.vo.GithubCode
-import run.cd80.tldr.core.http.HttpClientFactory
+import run.cd80.tldr.api.manager.github.dto.*
+import run.cd80.tldr.api.manager.github.response.*
+import run.cd80.tldr.api.manager.github.vo.*
+import run.cd80.tldr.core.http.HttpClient
 
 @Component
 class GithubManager(
-    private val httpClientFactory: HttpClientFactory,
+    private val httpClient: HttpClient,
     private val githubConfig: GithubConfig,
 ) {
 
@@ -32,8 +18,9 @@ class GithubManager(
         val reference = getReference(command.branch, repository, accessToken)
         val blob = createBlob(
             CreateBlob.Command(
-                content = command.content,
+                content = command.content.contentData(),
                 path = command.path,
+                encoding = command.content.encodeType(),
             ),
             repository,
             accessToken,
@@ -72,18 +59,16 @@ class GithubManager(
     }
 
     suspend fun getAccessToken(code: GithubCode): GithubAccessToken {
-        val response = httpClientFactory
-            .create()
-            .post(GITHUB_ACCESS_TOKEN_URL)
-            .header("Content-Type", "application/json; charset=utf-8")
-            .body(
+        val response = httpClient.post(GITHUB_ACCESS_TOKEN_URL) {
+            header("Content-Type", "application/json; charset=utf-8")
+            body(
                 mapOf(
                     "client_id" to githubConfig.clientId,
                     "client_secret" to githubConfig.clientSecret,
                     "code" to code,
                 ),
             )
-            .execute()
+        }
 
         return ACCESS_TOKEN_REGEX
             .find(response.body)
@@ -97,19 +82,18 @@ class GithubManager(
         repository: GitRepository,
         accessToken: GithubAccessToken,
     ): UpdateHeadResponse {
-        val response = httpClientFactory
-            .create()
-            .patch("https://api.github.com/repos/${repository.getFullName()}/git/refs/heads/${command.branch}")
-            .header("Accept", "application/vnd.github.v3+json")
-            .header("Content-Type", "application/json; charset=utf-8")
-            .header("Authorization", "Bearer $accessToken")
-            .body(
-                mapOf(
-                    "sha" to command.sha.toString(),
-                    "force" to command.force,
-                ),
-            )
-            .execute()
+        val response =
+            httpClient.patch("https://api.github.com/repos/${repository.getFullName()}/git/refs/heads/${command.branch}") {
+                header("Accept", "application/vnd.github.v3+json")
+                header("Content-Type", "application/json; charset=utf-8")
+                header("Authorization", "Bearer $accessToken")
+                body(
+                    mapOf(
+                        "sha" to command.sha.toString(),
+                        "force" to command.force,
+                    ),
+                )
+            }
 
         return Gson().fromJson(response.body, UpdateHeadResponse::class.java)
     }
@@ -119,20 +103,19 @@ class GithubManager(
         repository: GitRepository,
         accessToken: GithubAccessToken,
     ): CreateCommitResponse {
-        val response = httpClientFactory
-            .create()
-            .post("https://api.github.com/repos/${repository.getFullName()}/git/commits")
-            .header("Accept", "application/vnd.github.v3+json")
-            .header("Content-Type", "application/json; charset=utf-8")
-            .header("Authorization", "Bearer $accessToken")
-            .body(
-                mapOf(
-                    "message" to command.message,
-                    "tree" to command.tree.toString(),
-                    "parents" to command.parents,
-                ),
-            )
-            .execute()
+        val response = httpClient
+            .post("https://api.github.com/repos/${repository.getFullName()}/git/commits") {
+                header("Accept", "application/vnd.github.v3+json")
+                header("Content-Type", "application/json; charset=utf-8")
+                header("Authorization", "Bearer $accessToken")
+                body(
+                    mapOf(
+                        "message" to command.message,
+                        "tree" to command.tree.toString(),
+                        "parents" to command.parents,
+                    ),
+                )
+            }
 
         return Gson().fromJson(response.body, CreateCommitResponse::class.java)
     }
@@ -142,19 +125,17 @@ class GithubManager(
         repository: GitRepository,
         accessToken: GithubAccessToken,
     ): CreateTreeResponse {
-        val response = httpClientFactory
-            .create()
-            .post("https://api.github.com/repos/${repository.getFullName()}/git/trees")
-            .header("Accept", "application/vnd.github.v3+json")
-            .header("Content-Type", "application/json; charset=utf-8")
-            .header("Authorization", "Bearer $accessToken")
-            .body(
+        val response = httpClient.post("https://api.github.com/repos/${repository.getFullName()}/git/trees") {
+            header("Accept", "application/vnd.github.v3+json")
+            header("Content-Type", "application/json; charset=utf-8")
+            header("Authorization", "Bearer $accessToken")
+            body(
                 mapOf(
                     "base_tree" to command.baseTree,
                     "tree" to command.trees.map(CreateTreeItem::toMap),
                 ),
             )
-            .execute()
+        }
 
         return Gson().fromJson(response.body, CreateTreeResponse::class.java)
     }
@@ -164,19 +145,18 @@ class GithubManager(
         repository: GitRepository,
         accessToken: GithubAccessToken,
     ): CreateBlobResponse {
-        val response = httpClientFactory
-            .create()
-            .post("https://api.github.com/repos/${repository.getFullName()}/git/blobs")
-            .header("Accept", "application/vnd.github.v3+json")
-            .header("Content-Type", "application/json; charset=utf-8")
-            .header("Authorization", "Bearer $accessToken")
-            .body(
-                mapOf(
-                    "content" to command.base64Encode(),
-                    "encoding" to "base64",
-                ),
-            )
-            .execute()
+        val response = httpClient
+            .post("https://api.github.com/repos/${repository.getFullName()}/git/blobs") {
+                header("Accept", "application/vnd.github.v3+json")
+                header("Content-Type", "application/json; charset=utf-8")
+                header("Authorization", "Bearer $accessToken")
+                body(
+                    mapOf(
+                        "content" to command.content,
+                        "encoding" to command.encoding.value,
+                    ),
+                )
+            }
 
         return Gson().fromJson(response.body, CreateBlobResponse::class.java)
     }
@@ -186,13 +166,12 @@ class GithubManager(
         repository: GitRepository,
         accessToken: GithubAccessToken,
     ): GetReferenceResponse {
-        val response = httpClientFactory
-            .create()
-            .get("https://api.github.com/repos/${repository.getFullName()}/git/ref/heads/$branch")
-            .header("Accept", "application/vnd.github.v3+json")
-            .header("Content-Type", "application/json; charset=utf-8")
-            .header("Authorization", "Bearer $accessToken")
-            .execute()
+        val response = httpClient
+            .get("https://api.github.com/repos/${repository.getFullName()}/git/ref/heads/$branch") {
+                header("Accept", "application/vnd.github.v3+json")
+                header("Content-Type", "application/json; charset=utf-8")
+                header("Authorization", "Bearer $accessToken")
+            }
 
         return Gson().fromJson(response.body, GetReferenceResponse::class.java)
     }

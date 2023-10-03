@@ -4,21 +4,25 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Component
 import run.cd80.tldr.api.crawler.boj.dto.GetSolutions
-import run.cd80.tldr.core.http.HttpClientFactory
+import run.cd80.tldr.api.crawler.boj.type.JudgeResult
+import run.cd80.tldr.core.http.HttpClient
 import run.cd80.tldr.core.http.dto.HttpResponse
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Component
 class BojCrawler(
-    private val httpClientFactory: HttpClientFactory,
+    private val httpClient: HttpClient,
 ) {
 
     suspend fun getSolution(command: GetSolutions.Command): List<GetSolutions.Result> {
         val response =
-            httpClientFactory
-                .create()
-                .get(ACMICPC_STATUS_URL)
-                .queryParam("user_id", command.username)
-                .execute()
+            httpClient.get(ACMICPC_STATUS_URL) {
+                header("referer", "https://www.acmicpc.net/")
+                header("user-agent", "Mozilla/5.0")
+                header("content-type", "html/text")
+                parameter("user_id", command.username)
+            }
 
         return parseStatus(response).mapNotNull(::getSolutionResult)
     }
@@ -34,9 +38,12 @@ class BojCrawler(
         try {
             val tdElements = it.select("td")
             val problemId = tdElements[2].select("a").attr("href").split("/").last()
-            val submittedTime = tdElements[8].select("a").attr("data-timestamp")
+            val problemTitle = tdElements[2].select("a").attr("title")
+            val isCollect = tdElements[3].select("span").text()
+            val submittedTimeText = tdElements[8].select("a").attr("data-timestamp")
+            val submittedDateTime = LocalDateTime.ofEpochSecond(submittedTimeText.toLong(), 0, ZoneOffset.UTC)
 
-            GetSolutions.Result(problemId.toLong(), submittedTime.toLong())
+            GetSolutions.Result(problemId.toLong(), submittedDateTime, problemTitle, JudgeResult.fromString(isCollect))
         } catch (e: Exception) {
             null
         }
