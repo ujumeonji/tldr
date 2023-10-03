@@ -32,8 +32,9 @@ class GithubManager(
         val reference = getReference(command.branch, repository, accessToken)
         val blob = createBlob(
             CreateBlob.Command(
-                content = command.content,
+                content = command.content.contentData(),
                 path = command.path,
+                encoding = command.content.encodeType(),
             ),
             repository,
             accessToken,
@@ -172,8 +173,8 @@ class GithubManager(
             .header("Authorization", "Bearer $accessToken")
             .body(
                 mapOf(
-                    "content" to command.base64Encode(),
-                    "encoding" to "base64",
+                    "content" to command.content,
+                    "encoding" to command.encoding.value,
                 ),
             )
             .execute()
