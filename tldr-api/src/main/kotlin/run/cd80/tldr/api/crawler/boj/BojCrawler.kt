@@ -4,21 +4,19 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Component
 import run.cd80.tldr.api.crawler.boj.dto.GetSolutions
-import run.cd80.tldr.core.http.HttpClientFactory
+import run.cd80.tldr.core.http.HttpClient
 import run.cd80.tldr.core.http.dto.HttpResponse
 
 @Component
 class BojCrawler(
-    private val httpClientFactory: HttpClientFactory,
+    private val httpClient: HttpClient,
 ) {
 
     suspend fun getSolution(command: GetSolutions.Command): List<GetSolutions.Result> {
         val response =
-            httpClientFactory
-                .create()
-                .get(ACMICPC_STATUS_URL)
-                .queryParam("user_id", command.username)
-                .execute()
+            httpClient.get(ACMICPC_STATUS_URL) {
+                parameter("user_id", command.username)
+            }
 
         return parseStatus(response).mapNotNull(::getSolutionResult)
     }
