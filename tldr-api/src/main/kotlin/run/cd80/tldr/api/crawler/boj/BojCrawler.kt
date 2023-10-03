@@ -15,6 +15,9 @@ class BojCrawler(
     suspend fun getSolution(command: GetSolutions.Command): List<GetSolutions.Result> {
         val response =
             httpClient.get(ACMICPC_STATUS_URL) {
+                header("referer", "https://www.acmicpc.net/")
+                header("user-agent", "Mozilla/5.0")
+                header("content-type", "html/text")
                 parameter("user_id", command.username)
             }
 

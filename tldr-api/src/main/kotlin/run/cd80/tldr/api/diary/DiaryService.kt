@@ -22,10 +22,10 @@ class DiaryService(
     suspend fun createDiary() {
         val nowDate = calendar.now().toLocalDate()
         val solutions = bojCrawler.getSolution(
-            GetSolutions.Command("armhf")
+            GetSolutions.Command("test-boj-username")
         )
         val summaries = wakatimeCrawler.getTaskRecords(
-            GetTaskRecord.Command("waka_dc292d2c-83fd-499e-ad11-33f9c8604e58", nowDate)
+            GetTaskRecord.Command("test-api-key", nowDate)
         )
 
         githubManager.uploadFile(
@@ -35,8 +35,8 @@ class DiaryService(
                 "main",
                 "diary/${nowDate.year}/${nowDate.monthValue}/${nowDate.dayOfMonth}.md",
             ),
-            GitRepository.of("dygma0", "diary"),
-            GithubAccessToken.of("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")
+            GitRepository.of("test-owner", "test-repo"),
+            GithubAccessToken.of("test-access-token")
         )
     }
 }

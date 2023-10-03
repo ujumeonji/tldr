@@ -1,4 +1,6 @@
 dependencies {
+    implementation("com.github.kittinunf.fuel:fuel:3.0.0-alpha1")
+
     implementation("io.ktor:ktor-client:2.3.4")
     implementation("io.ktor:ktor-client-cio:2.3.4")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.4")
