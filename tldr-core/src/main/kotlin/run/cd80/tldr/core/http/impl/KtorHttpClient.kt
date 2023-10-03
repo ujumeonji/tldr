@@ -11,7 +11,6 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
-import kotlinx.coroutines.runBlocking
 import run.cd80.tldr.core.http.HttpClient
 import run.cd80.tldr.core.http.dto.HttpRequestScopeBuilder
 import run.cd80.tldr.core.http.dto.HttpResponse
@@ -41,36 +40,39 @@ class KtorHttpClient : HttpClient {
         }
     }
 
-    override fun get(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+    override suspend fun get(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
         request(KtorHttpMethod.Get, url, block)
 
-    override fun post(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+    override suspend fun post(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
         request(KtorHttpMethod.Post, url, block)
 
-    override fun put(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+    override suspend fun put(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
         request(KtorHttpMethod.Put, url, block)
 
-    override fun delete(url: String,block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+    override suspend fun delete(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
         request(KtorHttpMethod.Delete, url, block)
 
-    override fun patch(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
+    override suspend fun patch(url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
         request(KtorHttpMethod.Patch, url, block)
 
-    private fun request(method: KtorHttpMethod, url: String, block: HttpRequestScopeBuilder.() -> Unit): HttpResponse =
-        runBlocking {
-            val request = HttpRequestScopeBuilder().apply(block).build()
+    private suspend fun request(
+        method: KtorHttpMethod,
+        url: String,
+        block: HttpRequestScopeBuilder.() -> Unit
+    ): HttpResponse {
+        val request = HttpRequestScopeBuilder().apply(block).build()
 
-            val response = client.request {
-                this.method = method
-                url(request.uri ?: url)
-                contentType(ContentType.Application.Json)
-                request.parameters.forEach { (key, value) -> parameter(key, value) }
-                request.headers.forEach { (key, value) -> header(key, value) }
-                setBody(request.body)
-            }
-
-            HttpResponse(response.status.value, response.body())
+        val response = client.request {
+            this.method = method
+            url(request.uri ?: url)
+            contentType(ContentType.Application.Json)
+            request.parameters.forEach { (key, value) -> parameter(key, value) }
+            request.headers.forEach { (key, value) -> header(key, value) }
+            setBody(request.body)
         }
+
+        return HttpResponse(response.status.value, response.body())
+    }
 
     companion object {
 
