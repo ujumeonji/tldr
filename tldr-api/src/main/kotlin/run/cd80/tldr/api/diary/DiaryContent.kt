@@ -28,14 +28,14 @@ class DiaryContent(
         listOf(
             "## 오늘의 알고리즘",
             "### BOJ",
-            "| 문제 번호 | 제출 시간 |",
-            "| --- | --- |",
+            "| 문제 번호 | 문제 제목 | 결과 | 제출 시간 |",
+            "| --- | --- | --- | --- |",
             generateProblemList(),
         ).joinToString("\n")
 
     private fun generateProblemList(): String =
         solutions.joinToString("\n") {
-            "| ${it.problemId} | ${it.submittedTime} |"
+            "| ${it.problemId} | ${it.problemTitle} | ${it.judgeResult} | ${it.submittedTime} |"
         }
 
     private fun getSummaryList(): String =
