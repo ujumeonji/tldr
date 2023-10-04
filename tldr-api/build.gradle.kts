@@ -23,7 +23,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-    implementation("org.flywaydb:flyway-core")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -35,4 +34,5 @@ dependencies {
     testImplementation("org.springframework.batch:spring-batch-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("com.h2database:h2")
 }
