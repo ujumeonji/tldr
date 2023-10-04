@@ -28,8 +28,9 @@ subprojects {
     apply(plugin = "kotlin")
 
     dependencies {
-        implementation("com.google.code.gson:gson:2.10.1")
         implementation(kotlin("stdlib-jdk8"))
+        implementation("com.google.code.gson:gson:2.10.1")
+        implementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
         testImplementation(kotlin("test-junit5"))
         testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
     }
