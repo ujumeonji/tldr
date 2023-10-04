@@ -25,6 +25,10 @@ public class Account extends BaseEntity {
   protected Account() {
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public String getEmail() {
     return email;
   }

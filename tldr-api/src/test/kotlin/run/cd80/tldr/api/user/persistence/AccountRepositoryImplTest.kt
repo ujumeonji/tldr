@@ -16,6 +16,19 @@ class AccountRepositoryImplTest @Autowired constructor(
     private val entityManager: EntityManager,
 ) : DescribeSpec({
 
+    describe("save") {
+        it("should persist an account") {
+            // given
+            val account = Account.signUp("test@example.com", "test")
+
+            // when
+            accountRepository.save(account)
+
+            // then
+            entityManager.find(Account::class.java, account.id) shouldNotBe null
+        }
+    }
+
     describe("findByEmail") {
         it("should return an account") {
             // given
