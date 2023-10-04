@@ -4,8 +4,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class DiaryController (
-    private val diaryService: DiaryService
+class DiaryController(
+    private val diaryService: DiaryService,
 ) {
 
     @PostMapping("api/v1/diary")

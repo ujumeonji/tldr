@@ -1,9 +1,9 @@
 package run.cd80.tldr.api.diary
 
-import run.cd80.tldr.api.crawler.boj.dto.GetSolutions
-import run.cd80.tldr.api.crawler.wakatime.dto.GetTaskRecord
-import run.cd80.tldr.api.manager.github.type.EncodeType
-import run.cd80.tldr.api.manager.github.vo.GitContent
+import run.cd80.tldr.lib.crawler.boj.dto.GetSolutions
+import run.cd80.tldr.lib.crawler.wakatime.dto.GetTaskRecord
+import run.cd80.tldr.lib.github.type.EncodeType
+import run.cd80.tldr.lib.github.vo.GitContent
 import java.util.*
 
 class DiaryContent(
