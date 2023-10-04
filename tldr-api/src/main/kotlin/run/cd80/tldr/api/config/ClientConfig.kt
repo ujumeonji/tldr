@@ -2,11 +2,8 @@ package run.cd80.tldr.api.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import run.cd80.tldr.core.calendar.Calendar
-import run.cd80.tldr.core.calendar.impl.StandardCalendar
-import run.cd80.tldr.core.http.HttpClient
-import run.cd80.tldr.core.http.impl.FuelHttpClient
-import run.cd80.tldr.core.http.impl.KtorHttpClient
+import run.cd80.tldr.lib.http.HttpClient
+import run.cd80.tldr.lib.http.impl.FuelHttpClient
 
 @Configuration
 class ClientConfig {
@@ -14,9 +11,4 @@ class ClientConfig {
     @Bean
     fun httpClientFactory(): HttpClient =
         FuelHttpClient()
-
-    @Bean
-    fun calendar(): Calendar {
-        return StandardCalendar()
-    }
 }

@@ -1,3 +1,3 @@
 rootProject.name = "tldr"
 
-include("tldr-api", "tldr-core")
+include("tldr-api", "tldr-lib")
