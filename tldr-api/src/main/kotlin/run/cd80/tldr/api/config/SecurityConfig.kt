@@ -6,14 +6,19 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
+import run.cd80.tldr.api.config.handler.OAuth2AuthenticationSuccessHandler
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-class SecurityConfig {
+class SecurityConfig(
+    private val onSuccessHandler: OAuth2AuthenticationSuccessHandler,
+) {
 
     @Bean
-    fun filter(httpSecurity: HttpSecurity): SecurityFilterChain =
+    fun filter(
+        httpSecurity: HttpSecurity,
+    ): SecurityFilterChain =
         httpSecurity
             .apply(::disableSecurityConfig)
             .apply(::initializeOAuth2Login)
@@ -50,5 +55,8 @@ class SecurityConfig {
                 oAuth2LoginConfigurer.authorizationEndpoint {
                     it.baseUri("/auth/oauth2")
                 }
+
+                oAuth2LoginConfigurer
+                    .successHandler(onSuccessHandler)
             }
 }

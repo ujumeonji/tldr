@@ -10,7 +10,7 @@ import run.cd80.tldr.api.user.application.port.AccountRepository
 @Repository
 class AccountRepositoryImpl(
     @PersistenceContext
-    private val entityManager: EntityManager
+    private val entityManager: EntityManager,
 ) : AccountQueryRepository, AccountRepository {
 
     override fun findByEmail(email: String): Account? =

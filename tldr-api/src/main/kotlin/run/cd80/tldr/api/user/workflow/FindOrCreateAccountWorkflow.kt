@@ -3,8 +3,8 @@ package run.cd80.tldr.api.user.workflow
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import run.cd80.tldr.api.base.WorkflowScenario
-import run.cd80.tldr.api.user.application.dto.CreateAccount
 import run.cd80.tldr.api.user.application.AccountDomainService
+import run.cd80.tldr.api.user.application.dto.CreateAccount
 import run.cd80.tldr.api.user.workflow.dto.FindOrCreateAccount
 
 @Component
@@ -27,7 +27,7 @@ class FindOrCreateAccountWorkflow(
                 CreateAccount.Command(
                     email,
                     identifier,
-                )
+                ),
             )
             .let { FindOrCreateAccount.Response(it.email) }
 }
