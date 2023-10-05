@@ -7,3 +7,8 @@ services:
       - 'POSTGRES_USER=myuser'
     ports:
       - '5432'
+  redis:
+    image: 'redis:latest'
+    command: redis-server --requirepass mypassword --port 6379
+    ports:
+      - '6379'
