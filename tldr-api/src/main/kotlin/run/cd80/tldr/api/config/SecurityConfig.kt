@@ -22,6 +22,7 @@ class SecurityConfig(
         httpSecurity
             .apply(::disableSecurityConfig)
             .apply(::initializeOAuth2Login)
+            .apply(::initializeHttpBasic)
             .build()
 
     private fun disableSecurityConfig(httpSecurity: HttpSecurity): HttpSecurity =

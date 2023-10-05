@@ -1,3 +1,14 @@
+server:
+  servlet:
+    session:
+      cookie:
+        path: /
+        name: connect.sid
+        max-age: -1
+        domain: localhost
+        http-only: true
+        secure: false
+
 spring:
   config:
     activate:
@@ -12,6 +23,19 @@ spring:
             scope:
               - profile
               - email
+  data:
+    redis:
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 20
+          max-wait: 10s
+          min-idle: 5
+  cache:
+    type: redis
+  session:
+    redis:
+      namespace: tldr:session
 
 github:
   client-id: 'test-client-id'
