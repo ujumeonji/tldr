@@ -7,6 +7,6 @@ object FetchPostsByMonth {
 
     data class Command(
         val date: LocalDate,
-        val userId: AccountId,
+        val accountId: AccountId,
     )
 }
