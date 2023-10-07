@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.user.application.dto
+package run.cd80.tldr.api.user.application.port.`in`.dto
 
 object CreateAccount {
 

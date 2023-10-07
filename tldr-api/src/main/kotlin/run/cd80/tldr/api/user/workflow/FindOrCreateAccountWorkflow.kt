@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import run.cd80.tldr.api.base.WorkflowScenario
 import run.cd80.tldr.api.user.application.AccountDomainService
-import run.cd80.tldr.api.user.application.dto.CreateAccount
+import run.cd80.tldr.api.user.application.port.`in`.dto.CreateAccount
 import run.cd80.tldr.api.user.application.port.`in`.AccountService
 import run.cd80.tldr.api.user.workflow.dto.FindOrCreateAccount
 

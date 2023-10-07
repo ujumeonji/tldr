@@ -3,7 +3,7 @@ package run.cd80.tldr.api.user.application
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import run.cd80.tldr.api.domain.user.Account
-import run.cd80.tldr.api.user.application.dto.CreateAccount
+import run.cd80.tldr.api.user.application.port.`in`.dto.CreateAccount
 import run.cd80.tldr.api.user.application.port.`in`.AccountService
 import run.cd80.tldr.api.user.application.port.out.AccountQueryRepository
 import run.cd80.tldr.api.user.application.port.out.AccountRepository

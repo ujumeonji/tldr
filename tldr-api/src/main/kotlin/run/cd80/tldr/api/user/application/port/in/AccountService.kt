@@ -1,7 +1,7 @@
 package run.cd80.tldr.api.user.application.port.`in`
 
 import run.cd80.tldr.api.domain.user.Account
-import run.cd80.tldr.api.user.application.dto.CreateAccount
+import run.cd80.tldr.api.user.application.port.`in`.dto.CreateAccount
 
 interface AccountService {
 
