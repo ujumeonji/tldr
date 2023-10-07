@@ -5,11 +5,12 @@ import org.springframework.transaction.annotation.Transactional
 import run.cd80.tldr.api.base.WorkflowScenario
 import run.cd80.tldr.api.user.application.AccountDomainService
 import run.cd80.tldr.api.user.application.dto.CreateAccount
+import run.cd80.tldr.api.user.application.port.`in`.AccountService
 import run.cd80.tldr.api.user.workflow.dto.FindOrCreateAccount
 
 @Component
 class FindOrCreateAccountWorkflow(
-    private val accountDomainService: AccountDomainService,
+    private val accountDomainService: AccountService,
 ) : WorkflowScenario<FindOrCreateAccount.Request, FindOrCreateAccount.Response>() {
 
     @Transactional
