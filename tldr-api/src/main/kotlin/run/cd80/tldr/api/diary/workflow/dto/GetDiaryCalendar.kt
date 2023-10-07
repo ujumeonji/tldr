@@ -1,6 +1,7 @@
 package run.cd80.tldr.api.diary.workflow.dto
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 object GetDiaryCalendar {
 
@@ -15,7 +16,8 @@ object GetDiaryCalendar {
 
         data class Item(
             val id: Long,
-            val createdDate: LocalDate,
+            val title: String,
+            val createdDate: LocalDateTime,
         )
     }
 }

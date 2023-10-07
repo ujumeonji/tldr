@@ -28,4 +28,8 @@ public class Post extends BaseEntity {
   public Long getId() {
     return id;
   }
+
+  public String getTitle() {
+    return title;
+  }
 }

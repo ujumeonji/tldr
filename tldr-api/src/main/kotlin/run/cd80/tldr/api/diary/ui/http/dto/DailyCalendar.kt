@@ -1,6 +1,5 @@
 package run.cd80.tldr.api.diary.ui.http.dto
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 object DailyCalendar {
@@ -12,11 +11,12 @@ object DailyCalendar {
     data class Response(
         val date: LocalDateTime,
         val diaries: List<Diary>,
-    )
+    ) {
 
-    data class Diary(
-        val id: Long,
-        val title: String,
-        val createdAt: LocalDate,
-    )
+        data class Diary(
+            val id: Long,
+            val title: String,
+            val createdAt: LocalDateTime,
+        )
+    }
 }

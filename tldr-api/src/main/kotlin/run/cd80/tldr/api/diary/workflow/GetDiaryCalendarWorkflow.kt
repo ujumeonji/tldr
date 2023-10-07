@@ -29,7 +29,8 @@ class GetDiaryCalendarWorkflow(
     private fun toItem(post: Post): GetDiaryCalendar.Response.Item {
         return GetDiaryCalendar.Response.Item(
             id = post.id,
-            createdDate = post.createdAt.toLocalDate(),
+            title = post.title,
+            createdDate = post.createdAt,
         )
     }
 }
