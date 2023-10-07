@@ -3,13 +3,13 @@ package run.cd80.tldr.api.user.workflow
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import run.cd80.tldr.api.base.WorkflowScenario
-import run.cd80.tldr.api.user.application.AccountDomainService
-import run.cd80.tldr.api.user.application.dto.CreateAccount
+import run.cd80.tldr.api.user.application.port.inner.AccountService
+import run.cd80.tldr.api.user.application.port.inner.dto.CreateAccount
 import run.cd80.tldr.api.user.workflow.dto.FindOrCreateAccount
 
 @Component
 class FindOrCreateAccountWorkflow(
-    private val accountDomainService: AccountDomainService,
+    private val accountDomainService: AccountService,
 ) : WorkflowScenario<FindOrCreateAccount.Request, FindOrCreateAccount.Response>() {
 
     @Transactional
