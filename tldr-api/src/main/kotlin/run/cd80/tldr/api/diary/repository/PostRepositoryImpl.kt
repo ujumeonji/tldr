@@ -20,7 +20,7 @@ class PostRepositoryImpl(
         return entityManager
             .createQuery(
                 "SELECT p FROM Post p JOIN Account a WHERE a.id = :accountId AND p.createdAt BETWEEN :start AND :end AND p.deletedAt IS NULL",
-                Post::class.java
+                Post::class.java,
             )
             .setParameter("accountId", accountId.id)
             .setParameter("start", start)

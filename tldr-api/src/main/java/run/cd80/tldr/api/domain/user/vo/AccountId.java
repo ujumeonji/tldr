@@ -8,7 +8,7 @@ public class AccountId {
     this.id = id;
   }
 
-  static AccountId of(Long id) {
+  static public AccountId of(Long id) {
     return new AccountId(id);
   }
 

@@ -1,6 +1,6 @@
-package run.cd80.tldr.api.diary.application.port.`in`
+package run.cd80.tldr.api.diary.application.port.inner
 
-import run.cd80.tldr.api.diary.application.port.`in`.dto.FetchPostsByMonth
+import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsByMonth
 import run.cd80.tldr.api.domain.post.Post
 
 interface PostService {

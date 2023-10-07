@@ -24,4 +24,8 @@ public class Post extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id")
   private Account account;
+
+  public Long getId() {
+    return id;
+  }
 }

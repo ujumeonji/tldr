@@ -17,6 +17,6 @@ object DailyCalendar {
     data class Diary(
         val id: Long,
         val title: String,
-        val createdAt: LocalDate
+        val createdAt: LocalDate,
     )
 }

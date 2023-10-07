@@ -8,7 +8,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession
 
-
 @Configuration
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 86400)
 class RedisConfig(
@@ -25,7 +24,7 @@ class RedisConfig(
         val redisStandaloneConfiguration = RedisStandaloneConfiguration()
         redisStandaloneConfiguration.hostName = host
         redisStandaloneConfiguration.port = port
-        redisStandaloneConfiguration.setPassword(password);
+        redisStandaloneConfiguration.setPassword(password)
 
         return LettuceConnectionFactory(redisStandaloneConfiguration)
     }

@@ -12,6 +12,6 @@ class DiaryHttpController {
 
     @GetMapping("/calendar")
     fun getDiaries(
-        dailyCalendar: DailyCalendar.Request
+        dailyCalendar: DailyCalendar.Request,
     ): DailyCalendar.Response = DailyCalendar.Response(LocalDateTime.now(), listOf())
 }
