@@ -2,14 +2,13 @@ package run.cd80.tldr.api.diary.ui.http.dto
 
 import java.time.LocalDateTime
 
-object RecentViewed {
+object RecentlyViewed {
 
     data class Request(
         val count: Int,
     )
 
     data class Response(
-        val date: LocalDateTime,
         val diaries: List<Diary>,
     ) {
 

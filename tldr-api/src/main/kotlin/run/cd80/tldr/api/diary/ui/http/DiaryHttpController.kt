@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import run.cd80.tldr.api.diary.ui.http.dto.DailyCalendar
+import run.cd80.tldr.api.diary.ui.http.dto.RecentlyViewed
 import run.cd80.tldr.api.diary.workflow.GetDiaryCalendarWorkflow
 import run.cd80.tldr.api.diary.workflow.GetRecentlyViewedPostWorkflow
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
@@ -43,9 +44,9 @@ class DiaryHttpController(
 
     @GetMapping("/recently-viewed")
     fun getRecentViews(
-        recentViewed: GetRecentlyViewed.Request,
+        recentViewed: RecentlyViewed.Request,
         @AuthenticationPrincipal authentication: OAuth2AuthenticatedPrincipal,
-    ): GetRecentlyViewed.Response {
+    ): RecentlyViewed.Response {
         val response = getRecentlyViewedPostWorkflow.execute(
             GetRecentlyViewed.Request(
                 1L,
@@ -53,9 +54,9 @@ class DiaryHttpController(
             ),
         )
 
-        return GetRecentlyViewed.Response(
+        return RecentlyViewed.Response(
             response.items.map {
-                GetRecentlyViewed.Response.Item(it.id, it.title, it.content, it.createdDate)
+                RecentlyViewed.Response.Diary(it.id, it.title, it.content, it.createdDate)
             },
         )
     }
