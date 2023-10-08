@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import run.cd80.tldr.api.domain.BaseEntity;
 import run.cd80.tldr.api.domain.user.Account;
 
@@ -22,8 +23,20 @@ public class Post extends BaseEntity {
   private String content;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id")
+  @JoinColumn(name = "account_id")
   private Account account;
+
+  private LocalDateTime viewedAt;
+
+  protected Post() {}
+
+  public static Post create(String title, String content, Account account) {
+    Post post = new Post();
+    post.title = title;
+    post.content = content;
+    post.account = account;
+    return post;
+  }
 
   public Long getId() {
     return id;

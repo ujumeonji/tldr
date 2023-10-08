@@ -1,13 +1,12 @@
 package run.cd80.tldr.api.diary.workflow.dto
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 object GetDiaryCalendar {
 
     data class Request(
         val accountId: Long,
-        val nowDate: LocalDate,
+        val now: LocalDateTime,
     )
 
     data class Response(

@@ -14,5 +14,5 @@ class PostDomainService(
 ) : PostService {
 
     override fun fetchPostsByMonth(command: FetchPostsByMonth.Command): List<Post> =
-        postQueryRepository.findByMonth(command.accountId, command.nowDate)
+        postQueryRepository.findByMonth(command.accountId, command.now)
 }

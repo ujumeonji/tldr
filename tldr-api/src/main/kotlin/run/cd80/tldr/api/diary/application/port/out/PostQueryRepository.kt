@@ -2,9 +2,11 @@ package run.cd80.tldr.api.diary.application.port.out
 
 import run.cd80.tldr.api.domain.post.Post
 import run.cd80.tldr.api.domain.user.vo.AccountId
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 interface PostQueryRepository {
 
-    fun findByMonth(accountId: AccountId, date: LocalDate): List<Post>
+    fun findByMonth(accountId: AccountId, date: LocalDateTime): List<Post>
+
+    fun findRecentViewed(accountId: AccountId, count: Int = 5): List<Post>
 }

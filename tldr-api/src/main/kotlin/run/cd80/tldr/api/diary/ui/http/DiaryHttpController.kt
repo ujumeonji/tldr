@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RestController
 import run.cd80.tldr.api.diary.ui.http.dto.DailyCalendar
 import run.cd80.tldr.api.diary.workflow.GetDiaryCalendarWorkflow
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
+import run.cd80.tldr.lib.calendar.Calendar
 import java.time.LocalDate
 
 @RequestMapping("/diaries")
 @RestController
 class DiaryHttpController(
     private val getDiaryCalendarWorkflow: GetDiaryCalendarWorkflow,
+    private val calendar: Calendar,
 ) {
 
     @GetMapping("/calendar")
@@ -21,16 +23,16 @@ class DiaryHttpController(
         dailyCalendar: DailyCalendar.Request,
         @AuthenticationPrincipal authentication: OAuth2AuthenticatedPrincipal,
     ): DailyCalendar.Response {
-        val nowDate = LocalDate.now()
+        val now = calendar.now()
         val response = getDiaryCalendarWorkflow.execute(
             GetDiaryCalendar.Request(
                 1L,
-                nowDate,
+                now,
             ),
         )
 
         return DailyCalendar.Response(
-            nowDate.atStartOfDay(),
+            now,
             response.items.map {
                 DailyCalendar.Response.Diary(it.id, it.title, it.createdDate)
             },

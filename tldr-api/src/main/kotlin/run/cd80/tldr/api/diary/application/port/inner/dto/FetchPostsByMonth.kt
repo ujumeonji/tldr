@@ -1,12 +1,12 @@
 package run.cd80.tldr.api.diary.application.port.inner.dto
 
 import run.cd80.tldr.api.domain.user.vo.AccountId
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 object FetchPostsByMonth {
 
     data class Command(
-        val nowDate: LocalDate,
+        val now: LocalDateTime,
         val accountId: AccountId,
     )
 }
