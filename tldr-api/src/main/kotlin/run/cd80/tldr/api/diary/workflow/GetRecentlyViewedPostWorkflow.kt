@@ -3,31 +3,31 @@ package run.cd80.tldr.api.diary.workflow
 import org.springframework.stereotype.Component
 import run.cd80.tldr.api.base.WorkflowScenario
 import run.cd80.tldr.api.diary.application.port.inner.PostService
-import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentViewed
-import run.cd80.tldr.api.diary.workflow.dto.GetRecentViewed
+import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentlyViewed
+import run.cd80.tldr.api.diary.workflow.dto.GetRecentlyViewed
 import run.cd80.tldr.api.domain.post.Post
 import run.cd80.tldr.api.domain.user.vo.AccountId
 
 @Component
-class GetRecentViewedPostWorkflow(
+class GetRecentlyViewedPostWorkflow(
     private val postService: PostService,
-) : WorkflowScenario<GetRecentViewed.Request, GetRecentViewed.Response>() {
+) : WorkflowScenario<GetRecentlyViewed.Request, GetRecentlyViewed.Response>() {
 
-    override fun execute(command: GetRecentViewed.Request): GetRecentViewed.Response {
-        val posts = postService.fetchPostsRecentViewed(
-            FetchPostsRecentViewed.Command(
+    override fun execute(command: GetRecentlyViewed.Request): GetRecentlyViewed.Response {
+        val posts = postService.fetchPostsRecentlyViewed(
+            FetchPostsRecentlyViewed.Command(
                 AccountId.of(command.accountId),
                 command.count,
             ),
         )
 
-        return GetRecentViewed.Response(
+        return GetRecentlyViewed.Response(
             posts.map(::toItem),
         )
     }
 
-    private fun toItem(post: Post): GetRecentViewed.Response.Item {
-        return GetRecentViewed.Response.Item(
+    private fun toItem(post: Post): GetRecentlyViewed.Response.Item {
+        return GetRecentlyViewed.Response.Item(
             id = post.id,
             title = post.title,
             content = post.content,

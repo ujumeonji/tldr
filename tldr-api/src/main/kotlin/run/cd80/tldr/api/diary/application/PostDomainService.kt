@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import run.cd80.tldr.api.diary.application.port.inner.PostService
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsByMonth
-import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentViewed
+import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentlyViewed
 import run.cd80.tldr.api.diary.application.port.out.PostQueryRepository
 import run.cd80.tldr.api.domain.post.Post
 
@@ -17,6 +17,6 @@ class PostDomainService(
     override fun fetchPostsByMonth(command: FetchPostsByMonth.Command): List<Post> =
         postQueryRepository.findByMonth(command.accountId, command.now)
 
-    override fun fetchPostsRecentViewed(command: FetchPostsRecentViewed.Command): List<Post> =
-        postQueryRepository.findRecentViewed(command.accountId, command.count)
+    override fun fetchPostsRecentlyViewed(command: FetchPostsRecentlyViewed.Command): List<Post> =
+        postQueryRepository.findRecentlyViewed(command.accountId, command.count)
 }

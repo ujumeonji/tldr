@@ -2,7 +2,7 @@ package run.cd80.tldr.api.diary.workflow.dto
 
 import java.time.LocalDateTime
 
-object GetRecentViewed {
+object GetRecentlyViewed {
 
     data class Request(
         val accountId: Long,

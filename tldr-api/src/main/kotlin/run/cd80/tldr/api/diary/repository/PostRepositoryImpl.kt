@@ -28,7 +28,7 @@ class PostRepositoryImpl(
             .resultList
     }
 
-    override fun findRecentViewed(accountId: AccountId, count: Int): List<Post> {
+    override fun findRecentlyViewed(accountId: AccountId, count: Int): List<Post> {
         return entityManager
             .createQuery(
                 "SELECT p FROM Post p JOIN Account a ON a.id = p.account.id WHERE p.account.id = :accountId AND p.deletedAt IS NULL ORDER BY p.viewedAt DESC",
