@@ -2,11 +2,11 @@ package run.cd80.tldr.api.diary.workflow.dto
 
 import java.time.LocalDateTime
 
-object GetDiaryCalendar {
+object GetRecentlyViewed {
 
     data class Request(
         val accountId: Long,
-        val now: LocalDateTime,
+        val count: Int,
     )
 
     data class Response(
@@ -16,6 +16,7 @@ object GetDiaryCalendar {
         data class Item(
             val id: Long,
             val title: String,
+            val content: String,
             val createdDate: LocalDateTime,
         )
     }

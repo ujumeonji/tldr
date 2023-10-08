@@ -16,7 +16,7 @@ class GetDiaryCalendarWorkflow(
     override fun execute(command: GetDiaryCalendar.Request): GetDiaryCalendar.Response {
         val posts = postService.fetchPostsByMonth(
             FetchPostsByMonth.Command(
-                command.nowDate,
+                command.now,
                 AccountId.of(command.accountId),
             ),
         )
