@@ -29,7 +29,7 @@ class PostRepositoryImplTest @Autowired constructor(
             entityManager.persist(post)
 
             // when
-            val result = postRepository.findByMonth(AccountId.of(account.id), now)
+            val result = postRepository.findByMonth(AccountId.of(account.username), now)
 
             // then
             result shouldNotBe null

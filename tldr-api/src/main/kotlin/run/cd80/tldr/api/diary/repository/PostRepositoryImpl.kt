@@ -19,7 +19,7 @@ class PostRepositoryImpl(
         val end = date.withDayOfMonth(date.toLocalDate().lengthOfMonth()).withHour(23).withMinute(59).withSecond(59)
         return entityManager
             .createQuery(
-                "SELECT p FROM Post p JOIN Account a ON a.id = p.account.id WHERE p.account.id = :accountId AND p.createdAt BETWEEN :start AND :end AND p.deletedAt IS NULL",
+                "SELECT p FROM Post p JOIN Account a ON a.id = p.account.id WHERE p.account.username = :accountId AND p.account.deletedAt IS NULL AND p.createdAt BETWEEN :start AND :end AND p.deletedAt IS NULL",
                 Post::class.java,
             )
             .setParameter("accountId", accountId.id)
@@ -31,7 +31,7 @@ class PostRepositoryImpl(
     override fun findRecentlyViewed(accountId: AccountId, count: Int): List<Post> {
         return entityManager
             .createQuery(
-                "SELECT p FROM Post p JOIN Account a ON a.id = p.account.id WHERE p.account.id = :accountId AND p.deletedAt IS NULL ORDER BY p.viewedAt DESC",
+                "SELECT p FROM Post p JOIN Account a ON a.id = p.account.id WHERE p.account.username = :accountId AND p.account.deletedAt IS NULL AND p.deletedAt IS NULL ORDER BY p.viewedAt DESC",
                 Post::class.java,
             )
             .setParameter("accountId", accountId.id)

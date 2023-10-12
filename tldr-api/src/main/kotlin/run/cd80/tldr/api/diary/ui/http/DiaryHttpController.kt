@@ -32,7 +32,7 @@ class DiaryHttpController(
         val now = calendar.now()
         val response = getDiaryCalendarWorkflow.execute(
             GetDiaryCalendar.Request(
-                1L,
+                authentication.name,
                 now,
             ),
         )
@@ -49,11 +49,11 @@ class DiaryHttpController(
     @GetMapping("/recently-viewed")
     fun getRecentViews(
         recentViewed: RecentlyViewed.Request,
-        @AuthenticationPrincipal authentication: OAuth2AuthenticatedPrincipal,
+        @AuthenticationPrincipal authentication: DefaultSignInUser,
     ): RecentlyViewed.Response {
         val response = getRecentlyViewedPostWorkflow.execute(
             GetRecentlyViewed.Request(
-                1L,
+                authentication.name,
                 5,
             ),
         )

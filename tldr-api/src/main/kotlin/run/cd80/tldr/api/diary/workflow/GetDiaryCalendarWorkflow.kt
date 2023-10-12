@@ -17,7 +17,7 @@ class GetDiaryCalendarWorkflow(
         val posts = postService.fetchPostsByMonth(
             FetchPostsByMonth.Command(
                 command.now,
-                AccountId.of(command.accountId),
+                AccountId.of(command.username),
             ),
         )
 

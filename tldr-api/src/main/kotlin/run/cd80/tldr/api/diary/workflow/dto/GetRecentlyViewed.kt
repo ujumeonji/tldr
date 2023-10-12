@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 object GetRecentlyViewed {
 
     data class Request(
-        val accountId: Long,
+        val username: String,
         val count: Int,
     )
 
