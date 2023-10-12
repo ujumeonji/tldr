@@ -6,13 +6,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
-import run.cd80.tldr.api.config.handler.OAuth2AuthenticationSuccessHandler
+import run.cd80.tldr.api.config.oauth2.OAuth2UserSignUpService
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 class SecurityConfig(
-    private val onSuccessHandler: OAuth2AuthenticationSuccessHandler,
+    private val oauth2UserSignUpService: OAuth2UserSignUpService,
 ) {
 
     @Bean
@@ -58,6 +58,8 @@ class SecurityConfig(
                 }
 
                 oAuth2LoginConfigurer
-                    .successHandler(onSuccessHandler)
+                    .userInfoEndpoint {
+                        it.userService(oauth2UserSignUpService)
+                    }
             }
 }

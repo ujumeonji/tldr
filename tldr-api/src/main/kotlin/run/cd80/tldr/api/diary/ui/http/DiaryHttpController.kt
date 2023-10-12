@@ -1,5 +1,6 @@
 package run.cd80.tldr.api.diary.ui.http
 
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,6 +12,7 @@ import run.cd80.tldr.api.diary.workflow.GetDiaryCalendarWorkflow
 import run.cd80.tldr.api.diary.workflow.GetRecentlyViewedPostWorkflow
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
 import run.cd80.tldr.api.diary.workflow.dto.GetRecentlyViewed
+import run.cd80.tldr.api.domain.auth.DefaultSignInUser
 import run.cd80.tldr.lib.calendar.Calendar
 
 @RequestMapping("/diaries")
@@ -21,10 +23,11 @@ class DiaryHttpController(
     private val calendar: Calendar,
 ) {
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/calendar")
     fun getDiaries(
         dailyCalendar: DailyCalendar.Request,
-        @AuthenticationPrincipal authentication: OAuth2AuthenticatedPrincipal,
+        @AuthenticationPrincipal authentication: DefaultSignInUser,
     ): DailyCalendar.Response {
         val now = calendar.now()
         val response = getDiaryCalendarWorkflow.execute(
@@ -42,6 +45,7 @@ class DiaryHttpController(
         )
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/recently-viewed")
     fun getRecentViews(
         recentViewed: RecentlyViewed.Request,

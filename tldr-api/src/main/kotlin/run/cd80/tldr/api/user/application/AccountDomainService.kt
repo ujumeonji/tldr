@@ -17,7 +17,7 @@ class AccountDomainService(
 
     override fun createAccount(command: CreateAccount.Command): Account =
         Account
-            .signUp(command.email, command.identifier)
+            .signUp(command.email)
             .apply(accountRepository::save)
 
     @Transactional(readOnly = true)

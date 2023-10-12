@@ -29,5 +29,5 @@ class FindOrCreateAccountWorkflow(
                     identifier,
                 ),
             )
-            .let { FindOrCreateAccount.Response(it.email) }
+            .let { FindOrCreateAccount.Response(it.username) }
 }

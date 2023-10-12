@@ -8,6 +8,6 @@ object FindOrCreateAccount {
     )
 
     data class Response(
-        val email: String,
+        val username: String,
     )
 }

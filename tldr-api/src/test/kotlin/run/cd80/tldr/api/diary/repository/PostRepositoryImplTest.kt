@@ -23,7 +23,7 @@ class PostRepositoryImplTest @Autowired constructor(
         it("주어진 달에 작성된 게시글을 조회한다.") {
             // given
             val now = LocalDateTime.now()
-            val account = Account.signUp("123", "123")
+            val account = Account.signUp("123")
             entityManager.persist(account)
             val post = Post.create("test-title", "test-content", account)
             entityManager.persist(post)
