@@ -28,16 +28,15 @@ class DiaryHttpController(
         dailyCalendar: DailyCalendar.Request,
         @AuthenticationPrincipal authentication: DefaultSignInUser,
     ): DailyCalendar.Response {
-        val now = calendar.now()
         val response = getDiaryCalendarWorkflow.execute(
             GetDiaryCalendar.Request(
                 authentication.name,
-                now,
+                dailyCalendar.now,
             ),
         )
 
         return DailyCalendar.Response(
-            now,
+            dailyCalendar.now,
             response.items.map {
                 DailyCalendar.Response.Diary(it.id, it.title, it.createdDate)
             },

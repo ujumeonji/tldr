@@ -5,7 +5,6 @@ import org.springframework.security.core.context.SecurityContextImpl
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Component
 import run.cd80.tldr.api.domain.auth.DefaultSignInUser
-import run.cd80.tldr.api.domain.user.Account
 import java.time.Instant
 import java.util.*
 
@@ -14,7 +13,7 @@ class AuthenticationSessionFactory(
     private val sessionRedisOperations: RedisOperations<String, Any>,
 ) {
 
-    fun create(account: Account): String {
+    fun create(username: String): String {
         val uuid = UUID.randomUUID().toString()
         val key: String = SESSION_PREFIX + uuid
 
@@ -24,7 +23,7 @@ class AuthenticationSessionFactory(
         delta[LAST_ACCESSED_TIME_KEY] = Instant.now().toEpochMilli()
 
         val authentication = OAuth2AuthenticationToken(
-            DefaultSignInUser(account.email),
+            DefaultSignInUser(username),
             emptyList(),
             "google",
         )

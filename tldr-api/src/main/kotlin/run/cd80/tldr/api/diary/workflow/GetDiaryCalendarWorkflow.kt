@@ -1,6 +1,7 @@
 package run.cd80.tldr.api.diary.workflow
 
-import org.springframework.stereotype.Component
+import jakarta.transaction.Transactional
+import org.springframework.stereotype.Service
 import run.cd80.tldr.api.base.WorkflowScenario
 import run.cd80.tldr.api.diary.application.port.inner.PostService
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsByMonth
@@ -8,11 +9,12 @@ import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
 import run.cd80.tldr.api.domain.post.Post
 import run.cd80.tldr.api.domain.user.vo.AccountId
 
-@Component
+@Service
 class GetDiaryCalendarWorkflow(
     private val postService: PostService,
 ) : WorkflowScenario<GetDiaryCalendar.Request, GetDiaryCalendar.Response>() {
 
+    @Transactional
     override fun execute(command: GetDiaryCalendar.Request): GetDiaryCalendar.Response {
         val posts = postService.fetchPostsByMonth(
             FetchPostsByMonth.Command(

@@ -24,7 +24,7 @@ class PostRepositoryImplTest @Autowired constructor(
 
         "주어진 달에 작성된 게시글을 조회한다." {
             // given
-            val now = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
+            val now = LocalDateTime.of(2023, 10, 1, 0, 0, 0)
             val account = entityManager.createAccount(createdAt = now)
             val post = entityManager.createPost(account = account, createdAt = now)
 
@@ -39,7 +39,7 @@ class PostRepositoryImplTest @Autowired constructor(
 
         "범위에서 제외된 게시글은 조회되지 않는다." {
             // given
-            val now = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
+            val now = LocalDateTime.of(2023, 10, 1, 0, 0, 0)
             val account = entityManager.createAccount(createdAt = now)
             entityManager.createPost(account = account, createdAt = now.minusSeconds(1))
             entityManager.createPost(account = account, createdAt = now.plusMonths(1))
