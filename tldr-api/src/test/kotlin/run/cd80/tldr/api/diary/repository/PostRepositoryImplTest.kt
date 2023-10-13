@@ -1,54 +1,37 @@
 package run.cd80.tldr.api.diary.repository
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.longs.shouldBeGreaterThan
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import run.cd80.tldr.api.domain.user.vo.AccountId
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.context.annotation.Import
+import run.cd80.tldr.api.domain.post.Post
 import run.cd80.tldr.common.createAccount
-import run.cd80.tldr.common.createPost
 import java.time.LocalDateTime
 
 @Transactional
-@SpringBootTest
+@Import(PostRepositoryImpl::class)
+@DataJpaTest
 class PostRepositoryImplTest @Autowired constructor(
-    private val postRepository: PostQueryRepositoryImpl,
+    private val postRepository: PostRepositoryImpl,
     private val entityManager: EntityManager,
 ) : StringSpec() {
 
     init {
 
-        "주어진 달에 작성된 게시글을 조회한다." {
+        "새 글을 저장한다." {
             // given
             val now = LocalDateTime.of(2023, 10, 1, 0, 0, 0)
             val account = entityManager.createAccount(createdAt = now)
-            val post = entityManager.createPost(account = account, createdAt = now)
+            val post = Post.builder().account(account).createdAt(now).build()
 
             // when
-            val result = postRepository.findByMonth(AccountId.of(account.username), now)
+            val result = postRepository.save(post)
 
             // then
-            result shouldNotBe null
-            result shouldHaveSize 1
-            result[0] shouldBe post
-        }
-
-        "범위에서 제외된 게시글은 조회되지 않는다." {
-            // given
-            val now = LocalDateTime.of(2023, 10, 1, 0, 0, 0)
-            val account = entityManager.createAccount(createdAt = now)
-            entityManager.createPost(account = account, createdAt = now.minusSeconds(1))
-            entityManager.createPost(account = account, createdAt = now.plusMonths(1))
-
-            // when
-            val result = postRepository.findByMonth(AccountId.of(account.username), now)
-
-            // then
-            result shouldHaveSize 0
+            result.id shouldBeGreaterThan 0
         }
     }
 }

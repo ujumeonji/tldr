@@ -12,7 +12,10 @@ object CreateDiaryDto {
         val content: String,
         @field:Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$")
         val date: String,
-    )
+    ) {
+
+        val dateTime = "$date 00:00:00"
+    }
 
     data class Response(
         val id: Long,

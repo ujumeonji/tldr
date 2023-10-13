@@ -8,11 +8,13 @@ import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentlyView
 import run.cd80.tldr.api.diary.application.port.out.PostQueryRepository
 import run.cd80.tldr.api.diary.application.port.out.PostRepository
 import run.cd80.tldr.api.domain.post.Post
+import run.cd80.tldr.lib.calendar.Calendar
 
 @Service
 class PostDomainService(
     private val postQueryRepository: PostQueryRepository,
     private val postRepository: PostRepository,
+    private val calendar: Calendar,
 ) : PostService {
 
     override fun fetchPostsByMonth(command: FetchPostsByMonth.Command): List<Post> =
@@ -23,6 +25,6 @@ class PostDomainService(
 
     override fun createPost(command: CreateDailyDiary.Command): Post =
         Post
-            .create(command.title, command.content, command.account)
+            .create(command.title, command.content, command.account, command.date, calendar.now())
             .also(postRepository::save)
 }

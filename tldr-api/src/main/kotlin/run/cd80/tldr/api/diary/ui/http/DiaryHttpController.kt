@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import run.cd80.tldr.api.diary.ui.http.dto.CreateDiaryDto
@@ -72,7 +73,7 @@ class DiaryHttpController(
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     fun createDiary(
-        @Valid createDiary: CreateDiaryDto.Request,
+        @Valid @RequestBody createDiary: CreateDiaryDto.Request,
         @AuthenticationPrincipal authentication: DefaultSignInUser,
     ): CreateDiaryDto.Response {
         val response = createDiaryWorkflow.execute(
@@ -80,7 +81,7 @@ class DiaryHttpController(
                 authentication.name,
                 createDiary.title,
                 createDiary.content,
-                calendar.parse(createDiary.date, "yyyy-MM-dd 00:00:00"),
+                calendar.parse(createDiary.dateTime, "yyyy-MM-dd HH:mm:ss"),
             ),
         )
 

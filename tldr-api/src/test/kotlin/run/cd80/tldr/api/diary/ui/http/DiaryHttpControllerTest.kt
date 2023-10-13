@@ -12,10 +12,13 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import run.cd80.tldr.api.diary.ui.http.dto.CreateDiaryDto
 import run.cd80.tldr.api.diary.ui.http.dto.DailyCalendar
 import run.cd80.tldr.api.diary.ui.http.dto.RecentlyViewed
+import run.cd80.tldr.api.diary.workflow.CreateDiaryWorkflow
 import run.cd80.tldr.api.diary.workflow.GetDiaryCalendarWorkflow
 import run.cd80.tldr.api.diary.workflow.GetRecentlyViewedPostWorkflow
+import run.cd80.tldr.api.diary.workflow.dto.CreateDiary
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
 import run.cd80.tldr.api.diary.workflow.dto.GetRecentlyViewed
 import run.cd80.tldr.common.AuthenticationSessionFactory
@@ -31,6 +34,8 @@ class DiaryHttpControllerTest @Autowired constructor(
     private val getDiaryCalendarWorkflow: GetDiaryCalendarWorkflow,
     @MockBean
     private val getRecentlyViewedPostWorkflow: GetRecentlyViewedPostWorkflow,
+    @MockBean
+    private val createDiaryWorkflow: CreateDiaryWorkflow,
 ) : StringSpec() {
 
     init {
@@ -234,16 +239,15 @@ class DiaryHttpControllerTest @Autowired constructor(
             val session = authenticationSessionFactory.create(username)
 
             // when
-            val response =
-                RestAssured
-                    .given()
-                    .sessionId("connect.sid", session)
-                    .queryParam("count", count)
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .`when`()
-                    .get("/api/diaries/recently-viewed")
-                    .then()
-                    .statusCode(HttpStatus.BAD_REQUEST.value())
+            RestAssured
+                .given()
+                .sessionId("connect.sid", session)
+                .queryParam("count", count)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .`when`()
+                .get("/api/diaries/recently-viewed")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
 
             // then
         }
@@ -253,15 +257,85 @@ class DiaryHttpControllerTest @Autowired constructor(
             val count = 5
 
             // when
+            RestAssured
+                .given()
+                .queryParam("count", count)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .`when`()
+                .get("/api/diaries/recently-viewed")
+                .then()
+
+            // then
+        }
+
+        "새로운 글을 작성한다." {
+            // given
+            val username = "username"
+            val diaryAt = LocalDateTime.of(2023, 10, 1, 0, 0)
+            val createdAt = LocalDateTime.of(2023, 10, 1, 0, 0)
+            `when`(
+                createDiaryWorkflow.execute(
+                    CreateDiary.Request(
+                        username = username,
+                        title = "title",
+                        content = "content",
+                        date = diaryAt,
+                    ),
+                ),
+            ).thenReturn(
+                CreateDiary.Response(
+                    id = 1L,
+                    title = "title",
+                    content = "content",
+                    createdAt = createdAt,
+                ),
+            )
+            val session = authenticationSessionFactory.create(username)
+            val dto = CreateDiaryDto.Request(
+                title = "title",
+                content = "content",
+                date = "2023-10-01",
+            )
+
+            // when
             val response =
                 RestAssured
-                    .given()
-                    .queryParam("count", count)
+                    .given().log().all()
+                    .sessionId("connect.sid", session)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .body(dto)
                     .`when`()
-                    .get("/api/diaries/recently-viewed")
-                    .then()
-                    .statusCode(HttpStatus.FORBIDDEN.value())
+                    .post("/api/diaries")
+                    .then().log().all()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract().`as`(CreateDiaryDto.Response::class.java)
+
+            // then
+            response.id shouldBe 1L
+            response.title shouldBe "title"
+            response.content shouldBe "content"
+        }
+
+        "잘못된 유형의 일기 요일을 작성한 경우 BAD_REQUEST 에러를 반환한다." {
+            // given
+            val username = "username"
+            val session = authenticationSessionFactory.create(username)
+            val dto = CreateDiaryDto.Request(
+                title = "title",
+                content = "content",
+                date = "20231-10-01",
+            )
+
+            // when
+            RestAssured
+                .given().log().all()
+                .sessionId("connect.sid", session)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(dto)
+                .`when`()
+                .post("/api/diaries")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
 
             // then
         }
