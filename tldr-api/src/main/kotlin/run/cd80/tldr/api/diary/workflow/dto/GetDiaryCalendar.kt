@@ -16,7 +16,7 @@ object GetDiaryCalendar {
         data class Item(
             val id: Long,
             val title: String,
-            val createdDate: LocalDateTime,
+            val createdAt: LocalDateTime,
         )
     }
 }

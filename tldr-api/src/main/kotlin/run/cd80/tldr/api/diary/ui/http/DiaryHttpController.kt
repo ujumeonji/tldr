@@ -1,5 +1,6 @@
 package run.cd80.tldr.api.diary.ui.http
 
+import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,7 +26,7 @@ class DiaryHttpController(
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/calendar")
     fun getDiaries(
-        dailyCalendar: DailyCalendar.Request,
+        @Valid dailyCalendar: DailyCalendar.Request,
         @AuthenticationPrincipal authentication: DefaultSignInUser,
     ): DailyCalendar.Response {
         val response = getDiaryCalendarWorkflow.execute(
@@ -38,7 +39,7 @@ class DiaryHttpController(
         return DailyCalendar.Response(
             dailyCalendar.now,
             response.items.map {
-                DailyCalendar.Response.Diary(it.id, it.title, it.createdDate)
+                DailyCalendar.Response.Diary(it.id, it.title, it.createdAt)
             },
         )
     }

@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint
 import run.cd80.tldr.api.config.oauth2.OAuth2UserSignUpService
 
 @Configuration
@@ -49,15 +50,17 @@ class SecurityConfig(
                             .changeSessionId()
                     }
             }
+            .exceptionHandling {
+                it.authenticationEntryPoint(Http403ForbiddenEntryPoint())
+            }
 
     private fun initializeOAuth2Login(httpSecurity: HttpSecurity): HttpSecurity =
         httpSecurity
             .oauth2Login { oAuth2LoginConfigurer ->
-                oAuth2LoginConfigurer.authorizationEndpoint {
-                    it.baseUri("/auth/oauth2")
-                }
-
                 oAuth2LoginConfigurer
+                    .authorizationEndpoint {
+                        it.baseUri("/auth/oauth2")
+                    }
                     .userInfoEndpoint {
                         it.userService(oauth2UserSignUpService)
                     }
