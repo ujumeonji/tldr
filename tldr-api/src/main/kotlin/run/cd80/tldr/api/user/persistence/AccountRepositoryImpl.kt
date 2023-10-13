@@ -20,6 +20,13 @@ class AccountRepositoryImpl(
             .resultList
             .firstOrNull()
 
+    override fun findByUsername(username: String): Account? =
+        entityManager
+            .createQuery("SELECT a FROM Account a WHERE a.username = :username AND a.deletedAt IS NULL", Account::class.java)
+            .setParameter("username", username)
+            .resultList
+            .firstOrNull()
+
     override fun save(account: Account) =
         entityManager.persist(account)
 }

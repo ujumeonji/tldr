@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 @Transactional
 @SpringBootTest
 class PostRepositoryImplTest @Autowired constructor(
-    private val postRepository: PostRepositoryImpl,
+    private val postRepository: PostQueryRepositoryImpl,
     private val entityManager: EntityManager,
 ) : StringSpec() {
 

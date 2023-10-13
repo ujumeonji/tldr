@@ -8,4 +8,6 @@ interface AccountService {
     fun createAccount(command: CreateAccount.Command): Account
 
     fun findByEmail(email: String): Account?
+
+    fun findByUsername(username: String): Account?
 }
