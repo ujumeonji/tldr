@@ -13,8 +13,11 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import run.cd80.tldr.api.diary.ui.http.dto.DailyCalendar
+import run.cd80.tldr.api.diary.ui.http.dto.RecentlyViewed
 import run.cd80.tldr.api.diary.workflow.GetDiaryCalendarWorkflow
+import run.cd80.tldr.api.diary.workflow.GetRecentlyViewedPostWorkflow
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
+import run.cd80.tldr.api.diary.workflow.dto.GetRecentlyViewed
 import run.cd80.tldr.common.AuthenticationSessionFactory
 import java.time.LocalDateTime
 
@@ -26,6 +29,8 @@ class DiaryHttpControllerTest @Autowired constructor(
     private val authenticationSessionFactory: AuthenticationSessionFactory,
     @MockBean
     private val getDiaryCalendarWorkflow: GetDiaryCalendarWorkflow,
+    @MockBean
+    private val getRecentlyViewedPostWorkflow: GetRecentlyViewedPostWorkflow,
 ) : StringSpec() {
 
     init {
@@ -140,6 +145,123 @@ class DiaryHttpControllerTest @Autowired constructor(
                     .get("/api/diaries/calendar")
                     .then()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
+
+            // then
+        }
+
+        "최근 조회한 달력이 없는 경우 빈 배열을 반환한다." {
+            // given
+            val username = "username"
+            val count = 5
+            `when`(
+                getRecentlyViewedPostWorkflow.execute(
+                    GetRecentlyViewed.Request(
+                        username = username,
+                        count = count,
+                    ),
+                ),
+            ).thenReturn(GetRecentlyViewed.Response(emptyList()))
+            val session = authenticationSessionFactory.create(username)
+
+            // when
+            val response =
+                RestAssured
+                    .given()
+                    .sessionId("connect.sid", session)
+                    .queryParam("count", count)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .`when`()
+                    .get("/api/diaries/recently-viewed")
+                    .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract().`as`(RecentlyViewed.Response::class.java)
+
+            // then
+            response.diaries shouldHaveSize 0
+        }
+
+        "최근 조회한 일기 목록을 반환한다." {
+            // given
+            val username = "username"
+            val count = 5
+            val createdAt = LocalDateTime.of(2023, 10, 1, 0, 0)
+            `when`(
+                getRecentlyViewedPostWorkflow.execute(
+                    GetRecentlyViewed.Request(
+                        username = username,
+                        count = count,
+                    ),
+                ),
+            ).thenReturn(
+                GetRecentlyViewed.Response(
+                    listOf(
+                        GetRecentlyViewed.Response.Item(
+                            id = 1L,
+                            title = "title",
+                            content = "",
+                            createdAt = createdAt,
+                        ),
+                    ),
+                ),
+            )
+            val session = authenticationSessionFactory.create(username)
+
+            // when
+            val response =
+                RestAssured
+                    .given()
+                    .sessionId("connect.sid", session)
+                    .queryParam("count", count)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .`when`()
+                    .get("/api/diaries/recently-viewed")
+                    .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract().`as`(RecentlyViewed.Response::class.java)
+
+            // then
+            response.diaries shouldHaveSize 1
+            response.diaries[0].id shouldBe 1L
+            response.diaries[0].title shouldBe "title"
+            response.diaries[0].content shouldBe ""
+            response.diaries[0].createdAt shouldBe createdAt
+        }
+
+        "최근 조회한 일기는 최대 5개까지만 반환한다." {
+            // given
+            val username = "username"
+            val count = 6
+            val session = authenticationSessionFactory.create(username)
+
+            // when
+            val response =
+                RestAssured
+                    .given()
+                    .sessionId("connect.sid", session)
+                    .queryParam("count", count)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .`when`()
+                    .get("/api/diaries/recently-viewed")
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+
+            // then
+        }
+
+        "로그인하지 않은 사용자의 경우 최근 조회한 달력을 조회할 수 없다." {
+            // given
+            val count = 5
+
+            // when
+            val response =
+                RestAssured
+                    .given()
+                    .queryParam("count", count)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .`when`()
+                    .get("/api/diaries/recently-viewed")
+                    .then()
+                    .statusCode(HttpStatus.FORBIDDEN.value())
 
             // then
         }

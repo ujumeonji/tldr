@@ -31,7 +31,7 @@ class GetRecentlyViewedPostWorkflow(
             id = post.id,
             title = post.title,
             content = post.content,
-            createdDate = post.createdAt,
+            createdAt = post.createdAt,
         )
     }
 }

@@ -17,7 +17,7 @@ object GetRecentlyViewed {
             val id: Long,
             val title: String,
             val content: String,
-            val createdDate: LocalDateTime,
+            val createdAt: LocalDateTime,
         )
     }
 }

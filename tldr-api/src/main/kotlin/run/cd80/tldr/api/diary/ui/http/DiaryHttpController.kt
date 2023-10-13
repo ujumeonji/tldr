@@ -47,19 +47,19 @@ class DiaryHttpController(
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/recently-viewed")
     fun getRecentViews(
-        recentViewed: RecentlyViewed.Request,
+        @Valid recentViewed: RecentlyViewed.Request,
         @AuthenticationPrincipal authentication: DefaultSignInUser,
     ): RecentlyViewed.Response {
         val response = getRecentlyViewedPostWorkflow.execute(
             GetRecentlyViewed.Request(
                 authentication.name,
-                5,
+                recentViewed.count,
             ),
         )
 
         return RecentlyViewed.Response(
             response.items.map {
-                RecentlyViewed.Response.Diary(it.id, it.title, it.content, it.createdDate)
+                RecentlyViewed.Response.Diary(it.id, it.title, it.content, it.createdAt)
             },
         )
     }
