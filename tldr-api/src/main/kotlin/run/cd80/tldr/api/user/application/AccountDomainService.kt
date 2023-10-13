@@ -23,4 +23,8 @@ class AccountDomainService(
     @Transactional(readOnly = true)
     override fun findByEmail(email: String): Account? =
         accountQueryRepository.findByEmail(email)
+
+    @Transactional(readOnly = true)
+    override fun findByUsername(username: String): Account? =
+        accountQueryRepository.findByUsername(username)
 }

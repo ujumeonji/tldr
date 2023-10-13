@@ -30,23 +30,30 @@ public class Post extends BaseEntity {
 
   private LocalDateTime viewedAt;
 
+  private LocalDateTime diaryAt;
+
   protected Post() {}
 
   @Builder
-  public Post(Long id, String title, String content, Account account, LocalDateTime viewedAt, LocalDateTime createdAt) {
+  public Post(Long id, String title, String content, Account account, LocalDateTime viewedAt,
+              LocalDateTime diaryAt, LocalDateTime createdAt) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.account = account;
     this.viewedAt = viewedAt;
+    this.diaryAt = diaryAt;
     setCreatedAt(createdAt);
   }
 
-  public static Post create(String title, String content, Account account) {
+  public static Post create(String title, String content, Account account, LocalDateTime diaryAt, LocalDateTime createdAt) {
     Post post = new Post();
     post.title = title;
     post.content = content;
     post.account = account;
+    post.diaryAt = diaryAt;
+    post.setCreatedAt(createdAt);
+
     return post;
   }
 
