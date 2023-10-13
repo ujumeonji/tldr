@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 object GetDiaryCalendar {
 
     data class Request(
-        val accountId: Long,
+        val username: String,
         val now: LocalDateTime,
     )
 
@@ -16,7 +16,7 @@ object GetDiaryCalendar {
         data class Item(
             val id: Long,
             val title: String,
-            val createdDate: LocalDateTime,
+            val createdAt: LocalDateTime,
         )
     }
 }

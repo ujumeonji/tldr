@@ -16,7 +16,7 @@ class GetRecentlyViewedPostWorkflow(
     override fun execute(command: GetRecentlyViewed.Request): GetRecentlyViewed.Response {
         val posts = postService.fetchPostsRecentlyViewed(
             FetchPostsRecentlyViewed.Command(
-                AccountId.of(command.accountId),
+                AccountId.of(command.username),
                 command.count,
             ),
         )
@@ -31,7 +31,7 @@ class GetRecentlyViewedPostWorkflow(
             id = post.id,
             title = post.title,
             content = post.content,
-            createdDate = post.createdAt,
+            createdAt = post.createdAt,
         )
     }
 }

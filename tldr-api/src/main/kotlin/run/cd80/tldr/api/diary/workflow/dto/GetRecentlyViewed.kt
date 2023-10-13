@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 object GetRecentlyViewed {
 
     data class Request(
-        val accountId: Long,
+        val username: String,
         val count: Int,
     )
 
@@ -17,7 +17,7 @@ object GetRecentlyViewed {
             val id: Long,
             val title: String,
             val content: String,
-            val createdDate: LocalDateTime,
+            val createdAt: LocalDateTime,
         )
     }
 }

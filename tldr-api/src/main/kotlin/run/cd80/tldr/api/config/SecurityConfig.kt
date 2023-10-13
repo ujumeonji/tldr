@@ -6,13 +6,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
-import run.cd80.tldr.api.config.handler.OAuth2AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint
+import run.cd80.tldr.api.config.oauth2.OAuth2UserSignUpService
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 class SecurityConfig(
-    private val onSuccessHandler: OAuth2AuthenticationSuccessHandler,
+    private val oauth2UserSignUpService: OAuth2UserSignUpService,
 ) {
 
     @Bean
@@ -49,15 +50,19 @@ class SecurityConfig(
                             .changeSessionId()
                     }
             }
+            .exceptionHandling {
+                it.authenticationEntryPoint(Http403ForbiddenEntryPoint())
+            }
 
     private fun initializeOAuth2Login(httpSecurity: HttpSecurity): HttpSecurity =
         httpSecurity
             .oauth2Login { oAuth2LoginConfigurer ->
-                oAuth2LoginConfigurer.authorizationEndpoint {
-                    it.baseUri("/auth/oauth2")
-                }
-
                 oAuth2LoginConfigurer
-                    .successHandler(onSuccessHandler)
+                    .authorizationEndpoint {
+                        it.baseUri("/auth/oauth2")
+                    }
+                    .userInfoEndpoint {
+                        it.userService(oauth2UserSignUpService)
+                    }
             }
 }

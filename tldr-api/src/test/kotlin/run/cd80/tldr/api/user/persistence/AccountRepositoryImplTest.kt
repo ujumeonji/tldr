@@ -19,7 +19,7 @@ class AccountRepositoryImplTest @Autowired constructor(
     describe("save") {
         it("should persist an account") {
             // given
-            val account = Account.signUp("test@example.com", "test")
+            val account = Account.signUp("test@example.com")
 
             // when
             accountRepository.save(account)
@@ -32,7 +32,7 @@ class AccountRepositoryImplTest @Autowired constructor(
     describe("findByEmail") {
         it("should return an account") {
             // given
-            val account = Account.signUp("test@example.com", "test")
+            val account = Account.signUp("test@example.com")
             entityManager.persist(account)
 
             // when

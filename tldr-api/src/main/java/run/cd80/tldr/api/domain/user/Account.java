@@ -1,28 +1,40 @@
 package run.cd80.tldr.api.domain.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Builder;
+import org.springframework.util.Assert;
 import run.cd80.tldr.api.domain.BaseEntity;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Entity
-@Table(name = "account", indexes = {
-    @Index(name = "idx_account_identifier", columnList = "identifier")
+@Table(name = "account", uniqueConstraints = {
+  @UniqueConstraint(name = "uni_account_username", columnNames = "username")
 })
 public class Account extends BaseEntity {
+
+  private static final String MAIL_SPLITTER = "@";
+
+  private static final String USERNAME_SPLITTER = "#";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String identifier;
-
   private String email;
 
+  private String username;
+
   protected Account() {
+  }
+
+  @Builder
+  public Account(Long id, String email, String username, LocalDateTime createdAt) {
+    this.id = id;
+    this.email = email;
+    this.username = username;
+    setCreatedAt(createdAt);
   }
 
   public Long getId() {
@@ -33,10 +45,20 @@ public class Account extends BaseEntity {
     return email;
   }
 
-  public static Account signUp(String email, String identifier) {
+  public String getUsername() {
+    return username;
+  }
+
+  public static Account signUp(final String email) {
+    Assert.hasText(email, "email must not be empty");
+
     Account account = new Account();
-    account.identifier = identifier;
+    account.username = generateUsername(email);
     account.email = email;
     return account;
+  }
+
+  private static String generateUsername(String email) {
+    return email.split(MAIL_SPLITTER)[0] + USERNAME_SPLITTER + UUID.randomUUID().toString().substring(0, 8);
   }
 }
