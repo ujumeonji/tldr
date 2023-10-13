@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+
+import lombok.Builder;
 import run.cd80.tldr.api.domain.BaseEntity;
 import run.cd80.tldr.api.domain.user.Account;
 
@@ -29,6 +31,16 @@ public class Post extends BaseEntity {
   private LocalDateTime viewedAt;
 
   protected Post() {}
+
+  @Builder
+  public Post(Long id, String title, String content, Account account, LocalDateTime viewedAt, LocalDateTime createdAt) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.account = account;
+    this.viewedAt = viewedAt;
+    setCreatedAt(createdAt);
+  }
 
   public static Post create(String title, String content, Account account) {
     Post post = new Post();

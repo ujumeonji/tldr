@@ -1,9 +1,11 @@
 package run.cd80.tldr.api.domain.user;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.springframework.util.Assert;
 import run.cd80.tldr.api.domain.BaseEntity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -25,6 +27,14 @@ public class Account extends BaseEntity {
   private String username;
 
   protected Account() {
+  }
+
+  @Builder
+  public Account(Long id, String email, String username, LocalDateTime createdAt) {
+    this.id = id;
+    this.email = email;
+    this.username = username;
+    setCreatedAt(createdAt);
   }
 
   public Long getId() {
