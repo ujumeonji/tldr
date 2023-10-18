@@ -20,7 +20,7 @@ import run.cd80.tldr.api.diary.workflow.dto.GetRecentlyViewed
 import run.cd80.tldr.api.domain.auth.DefaultSignInUser
 import run.cd80.tldr.lib.calendar.Calendar
 
-@RequestMapping("/diaries")
+@RequestMapping("/v1/diaries")
 @RestController
 class DiaryHttpController(
     private val getDiaryCalendarWorkflow: GetDiaryCalendarWorkflow,
@@ -45,7 +45,7 @@ class DiaryHttpController(
         return DailyCalendar.Response(
             dailyCalendar.now,
             response.items.map {
-                DailyCalendar.Response.Diary(it.id, it.title, it.createdAt)
+                DailyCalendar.Response.Diary(it.id, it.title, it.diaryAt, it.createdAt)
             },
         )
     }

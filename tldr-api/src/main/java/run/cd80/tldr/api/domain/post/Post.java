@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 import lombok.Builder;
+import org.springframework.cglib.core.Local;
 import run.cd80.tldr.api.domain.BaseEntity;
 import run.cd80.tldr.api.domain.user.Account;
 
@@ -67,5 +68,9 @@ public class Post extends BaseEntity {
 
   public String getContent() {
     return content;
+  }
+
+  public LocalDateTime getDiaryAt() {
+    return diaryAt;
   }
 }
