@@ -10,8 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import run.cd80.tldr.api.domain.BaseEntity;
+import run.cd80.tldr.api.domain.user.Account;
 
 @Getter
 @Entity
@@ -26,4 +29,12 @@ public class Credential extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private Provider provider;
+
+  @ManyToOne
+  @JoinColumn(name = "account_id", nullable = false)
+  private Account account;
+
+  protected void setAccount(Account account) {
+    this.account = account;
+  }
 }
