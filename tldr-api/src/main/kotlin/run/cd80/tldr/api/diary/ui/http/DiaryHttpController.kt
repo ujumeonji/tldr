@@ -4,17 +4,21 @@ import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import run.cd80.tldr.api.diary.ui.http.dto.CreateDiaryDto
 import run.cd80.tldr.api.diary.ui.http.dto.DailyCalendar
+import run.cd80.tldr.api.diary.ui.http.dto.GetDiaryBySlugDto
 import run.cd80.tldr.api.diary.ui.http.dto.RecentlyViewed
 import run.cd80.tldr.api.diary.workflow.CreateDiaryWorkflow
+import run.cd80.tldr.api.diary.workflow.GetDiaryBySlugWorkflow
 import run.cd80.tldr.api.diary.workflow.GetDiaryCalendarWorkflow
 import run.cd80.tldr.api.diary.workflow.GetRecentlyViewedPostWorkflow
 import run.cd80.tldr.api.diary.workflow.dto.CreateDiary
+import run.cd80.tldr.api.diary.workflow.dto.GetDiaryBySlug
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
 import run.cd80.tldr.api.diary.workflow.dto.GetRecentlyViewed
 import run.cd80.tldr.api.domain.auth.DefaultSignInUser
@@ -26,12 +30,13 @@ class DiaryHttpController(
     private val getDiaryCalendarWorkflow: GetDiaryCalendarWorkflow,
     private val getRecentlyViewedPostWorkflow: GetRecentlyViewedPostWorkflow,
     private val createDiaryWorkflow: CreateDiaryWorkflow,
+    private val getDiaryBySlugWorkflow: GetDiaryBySlugWorkflow,
     private val calendar: Calendar,
 ) {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/calendar")
-    fun getDiaries(
+    fun getDiaryCalendar(
         @Valid dailyCalendar: DailyCalendar.Request,
         @AuthenticationPrincipal authentication: DefaultSignInUser,
     ): DailyCalendar.Response {
@@ -89,6 +94,25 @@ class DiaryHttpController(
             response.id,
             response.title,
             response.content,
+        )
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/slug/{slug}")
+    fun getDiaryBySlug(
+        @PathVariable slug: String,
+        @Valid @RequestBody createDiary: GetDiaryBySlugDto.Request,
+        @AuthenticationPrincipal authentication: DefaultSignInUser,
+    ): GetDiaryBySlugDto.Response {
+        val response = getDiaryBySlugWorkflow.execute(
+            GetDiaryBySlug.Request(
+                slug,
+            ),
+        )
+
+        return GetDiaryBySlugDto.Response(
+            response.id,
+            response.title,
         )
     }
 }
