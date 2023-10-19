@@ -3,6 +3,7 @@ package run.cd80.tldr.api.diary.application
 import org.springframework.stereotype.Service
 import run.cd80.tldr.api.diary.application.port.inner.PostService
 import run.cd80.tldr.api.diary.application.port.inner.dto.CreateDailyDiary
+import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostBySlug
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsByMonth
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentlyViewed
 import run.cd80.tldr.api.diary.application.port.out.PostQueryRepository
@@ -22,6 +23,9 @@ class PostDomainService(
 
     override fun fetchPostsRecentlyViewed(command: FetchPostsRecentlyViewed.Command): List<Post> =
         postQueryRepository.findRecentlyViewed(command.accountId, command.count)
+
+    override fun fetchPostBySlug(command: FetchPostBySlug.Command): Post? =
+        postQueryRepository.findBySlug(command.slug)
 
     override fun createPost(command: CreateDailyDiary.Command): Post =
         Post

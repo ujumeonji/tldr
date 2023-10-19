@@ -10,11 +10,17 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 import lombok.Builder;
+import lombok.Getter;
+import org.springframework.cglib.core.Local;
 import run.cd80.tldr.api.domain.BaseEntity;
 import run.cd80.tldr.api.domain.user.Account;
 
 @Entity
+@Getter
 public class Post extends BaseEntity {
+  static final String READABLE_CHARACTER_REGEX = "[^a-z0-9가-힣\\s]";
+
+  static final String WHITESPACE_REGEX = "\\s+";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +29,8 @@ public class Post extends BaseEntity {
   private String title;
 
   private String content;
+
+  private String slug;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "account_id")
@@ -49,6 +57,7 @@ public class Post extends BaseEntity {
   public static Post create(String title, String content, Account account, LocalDateTime diaryAt, LocalDateTime createdAt) {
     Post post = new Post();
     post.title = title;
+    post.slug = slugify(title);
     post.content = content;
     post.account = account;
     post.diaryAt = diaryAt;
@@ -57,15 +66,7 @@ public class Post extends BaseEntity {
     return post;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getContent() {
-    return content;
+  private static String slugify(String title) {
+    return title.toLowerCase().replaceAll(READABLE_CHARACTER_REGEX, "").replaceAll(WHITESPACE_REGEX, "-");
   }
 }

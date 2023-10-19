@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint
+import org.springframework.web.cors.CorsConfiguration
 import run.cd80.tldr.api.config.oauth2.OAuth2UserSignUpService
 
 @Configuration
@@ -24,6 +25,7 @@ class SecurityConfig(
             .apply(::disableSecurityConfig)
             .apply(::initializeOAuth2Login)
             .apply(::initializeHttpBasic)
+            .apply(::initializeCors)
             .build()
 
     private fun disableSecurityConfig(httpSecurity: HttpSecurity): HttpSecurity =
@@ -64,5 +66,19 @@ class SecurityConfig(
                     .userInfoEndpoint {
                         it.userService(oauth2UserSignUpService)
                     }
+            }
+
+    private fun initializeCors(httpSecurity: HttpSecurity): HttpSecurity =
+        httpSecurity
+            .cors {
+                it.configurationSource {
+                    val corsConfiguration = CorsConfiguration()
+                    corsConfiguration.addAllowedOriginPattern("*")
+                    corsConfiguration.allowedMethods = listOf("*")
+                    corsConfiguration.allowedHeaders = listOf("*")
+                    corsConfiguration.allowCredentials = true
+                    corsConfiguration.maxAge = 3600L
+                    corsConfiguration
+                }
             }
 }

@@ -32,6 +32,7 @@ class GetDiaryCalendarWorkflow(
         return GetDiaryCalendar.Response.Item(
             id = post.id,
             title = post.title,
+            diaryAt = post.diaryAt,
             createdAt = post.createdAt,
         )
     }

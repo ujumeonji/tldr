@@ -11,4 +11,6 @@ interface PostQueryRepository {
     fun findRecentlyViewed(accountId: AccountId, count: Int = 5): List<Post>
 
     fun findByDate(accountId: AccountId, date: LocalDateTime): List<Post>
+
+    fun findBySlug(slug: String): Post?
 }

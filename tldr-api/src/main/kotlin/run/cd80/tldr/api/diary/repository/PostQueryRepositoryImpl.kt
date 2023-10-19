@@ -52,4 +52,15 @@ class PostQueryRepositoryImpl(
             .setParameter("end", end)
             .resultList
     }
+
+    override fun findBySlug(slug: String): Post? {
+        return entityManager
+            .createQuery(
+                "SELECT p FROM Post p WHERE p.slug = :slug AND p.deletedAt IS NULL",
+                Post::class.java,
+            )
+            .setParameter("slug", slug)
+            .resultList
+            .firstOrNull()
+    }
 }
