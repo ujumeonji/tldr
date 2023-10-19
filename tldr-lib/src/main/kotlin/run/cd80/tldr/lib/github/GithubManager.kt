@@ -95,8 +95,9 @@ class GithubManager(
     ): UpdateHeadResponse {
         val response =
             httpClient.patch("https://api.github.com/repos/${repository.getFullName()}/git/refs/heads/${command.branch}") {
-                header("Accept", "application/vnd.github.v3+json")
+                header("Accept", "application/vnd.github+json")
                 header("Content-Type", "application/json; charset=utf-8")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
                 body(
                     mapOf(
@@ -116,8 +117,9 @@ class GithubManager(
     ): CreateCommitResponse {
         val response = httpClient
             .post("https://api.github.com/repos/${repository.getFullName()}/git/commits") {
-                header("Accept", "application/vnd.github.v3+json")
+                header("Accept", "application/vnd.github+json")
                 header("Content-Type", "application/json; charset=utf-8")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
                 body(
                     mapOf(
@@ -137,8 +139,9 @@ class GithubManager(
         accessToken: GithubAccessToken,
     ): CreateTreeResponse {
         val response = httpClient.post("https://api.github.com/repos/${repository.getFullName()}/git/trees") {
-            header("Accept", "application/vnd.github.v3+json")
+            header("Accept", "application/vnd.github+json")
             header("Content-Type", "application/json; charset=utf-8")
+            header("X-GitHub-Api-Version", "2022-11-28")
             header("Authorization", "Bearer $accessToken")
             body(
                 mapOf(
@@ -158,8 +161,8 @@ class GithubManager(
     ): CreateBlobResponse {
         val response = httpClient
             .post("https://api.github.com/repos/${repository.getFullName()}/git/blobs") {
-                header("Accept", "application/vnd.github.v3+json")
-                header("Content-Type", "application/json; charset=utf-8")
+                header("Accept", "application/vnd.github+json")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
                 body(
                     mapOf(
@@ -179,8 +182,9 @@ class GithubManager(
     ): GetReferenceResponse {
         val response = httpClient
             .get("https://api.github.com/repos/${repository.getFullName()}/git/ref/heads/$branch") {
-                header("Accept", "application/vnd.github.v3+json")
+                header("Accept", "application/vnd.github+json")
                 header("Content-Type", "application/json; charset=utf-8")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
             }
 
