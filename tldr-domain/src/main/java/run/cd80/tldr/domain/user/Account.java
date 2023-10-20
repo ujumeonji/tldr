@@ -1,9 +1,9 @@
-package run.cd80.tldr.api.domain.user;
+package run.cd80.tldr.domain.user;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import org.springframework.util.Assert;
-import run.cd80.tldr.api.domain.BaseEntity;
+import run.cd80.tldr.domain.BaseEntity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

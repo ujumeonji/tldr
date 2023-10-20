@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.domain.user.vo;
+package run.cd80.tldr.domain.user.vo;
 
 public class AccountId {
 

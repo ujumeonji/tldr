@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import run.cd80.tldr.api.auth.DefaultSignInUser
 import run.cd80.tldr.api.diary.ui.http.dto.CreateDiaryDto
 import run.cd80.tldr.api.diary.ui.http.dto.DailyCalendar
 import run.cd80.tldr.api.diary.ui.http.dto.RecentlyViewed
@@ -17,7 +18,6 @@ import run.cd80.tldr.api.diary.workflow.GetRecentlyViewedPostWorkflow
 import run.cd80.tldr.api.diary.workflow.dto.CreateDiary
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
 import run.cd80.tldr.api.diary.workflow.dto.GetRecentlyViewed
-import run.cd80.tldr.api.domain.auth.DefaultSignInUser
 import run.cd80.tldr.lib.calendar.Calendar
 
 @RequestMapping("/diaries")

@@ -5,7 +5,6 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import run.cd80.tldr.fixture.StubHttpClient
 import run.cd80.tldr.lib.crawler.boj.dto.GetSolutions
-import run.cd80.tldr.lib.crawler.boj.type.JudgeResult
 import run.cd80.tldr.lib.http.dto.HttpResponse
 
 class BojCrawlerTest : BehaviorSpec({

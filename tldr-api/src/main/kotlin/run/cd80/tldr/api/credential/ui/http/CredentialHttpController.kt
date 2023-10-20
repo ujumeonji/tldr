@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import run.cd80.tldr.api.auth.DefaultSignInUser
 import run.cd80.tldr.api.credential.ui.http.dto.CreateCredentialDto
 import run.cd80.tldr.api.credential.workflow.RegisterProviderWorkflow
-import run.cd80.tldr.api.domain.auth.DefaultSignInUser
 
 @RequestMapping("/credentials")
 @RestController

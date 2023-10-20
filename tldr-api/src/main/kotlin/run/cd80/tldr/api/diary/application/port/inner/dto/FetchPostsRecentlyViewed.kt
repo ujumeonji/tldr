@@ -1,6 +1,6 @@
 package run.cd80.tldr.api.diary.application.port.inner.dto
 
-import run.cd80.tldr.api.domain.user.vo.AccountId
+import run.cd80.tldr.domain.user.vo.AccountId
 
 class FetchPostsRecentlyViewed {
 

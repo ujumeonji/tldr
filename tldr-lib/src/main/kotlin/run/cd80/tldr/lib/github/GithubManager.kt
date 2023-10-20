@@ -7,7 +7,11 @@ import run.cd80.tldr.lib.github.dto.CreateTree
 import run.cd80.tldr.lib.github.dto.CreateTreeItem
 import run.cd80.tldr.lib.github.dto.UpdateHead
 import run.cd80.tldr.lib.github.dto.UploadFile
-import run.cd80.tldr.lib.github.response.*
+import run.cd80.tldr.lib.github.response.CreateBlobResponse
+import run.cd80.tldr.lib.github.response.CreateCommitResponse
+import run.cd80.tldr.lib.github.response.CreateTreeResponse
+import run.cd80.tldr.lib.github.response.GetReferenceResponse
+import run.cd80.tldr.lib.github.response.UpdateHeadResponse
 import run.cd80.tldr.lib.github.vo.GitBlob
 import run.cd80.tldr.lib.github.vo.GitCommit
 import run.cd80.tldr.lib.github.vo.GitRepository

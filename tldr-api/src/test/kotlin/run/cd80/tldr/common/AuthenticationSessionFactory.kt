@@ -4,7 +4,7 @@ import org.springframework.data.redis.core.RedisOperations
 import org.springframework.security.core.context.SecurityContextImpl
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Component
-import run.cd80.tldr.api.domain.auth.DefaultSignInUser
+import run.cd80.tldr.api.auth.DefaultSignInUser
 import java.time.Instant
 import java.util.*
 

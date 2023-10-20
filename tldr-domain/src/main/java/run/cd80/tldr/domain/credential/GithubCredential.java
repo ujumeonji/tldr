@@ -1,10 +1,10 @@
-package run.cd80.tldr.api.domain.credential;
+package run.cd80.tldr.domain.credential;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import lombok.Builder;
-import run.cd80.tldr.api.domain.user.Account;
+import run.cd80.tldr.domain.user.Account;
 
 @Entity
 @DiscriminatorValue("GITHUB")

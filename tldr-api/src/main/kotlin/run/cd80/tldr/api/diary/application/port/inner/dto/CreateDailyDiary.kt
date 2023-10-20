@@ -1,6 +1,6 @@
 package run.cd80.tldr.api.diary.application.port.inner.dto
 
-import run.cd80.tldr.api.domain.user.Account
+import run.cd80.tldr.domain.user.Account
 import java.time.LocalDateTime
 
 object CreateDailyDiary {

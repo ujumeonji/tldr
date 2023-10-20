@@ -7,8 +7,8 @@ import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import run.cd80.tldr.api.domain.user.Account
 import run.cd80.tldr.common.createAccount
+import run.cd80.tldr.domain.user.Account
 
 @Transactional
 @SpringBootTest

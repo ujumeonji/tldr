@@ -1,7 +1,7 @@
 package run.cd80.tldr.api.diary.application.port.out
 
-import run.cd80.tldr.api.domain.post.Post
-import run.cd80.tldr.api.domain.user.vo.AccountId
+import run.cd80.tldr.domain.post.Post
+import run.cd80.tldr.domain.user.vo.AccountId
 import java.time.LocalDateTime
 
 interface PostQueryRepository {

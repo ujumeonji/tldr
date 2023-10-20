@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.domain.post;
+package run.cd80.tldr.domain.post;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,8 +10,8 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 import lombok.Builder;
-import run.cd80.tldr.api.domain.BaseEntity;
-import run.cd80.tldr.api.domain.user.Account;
+import run.cd80.tldr.domain.BaseEntity;
+import run.cd80.tldr.domain.user.Account;
 
 @Entity
 public class Post extends BaseEntity {

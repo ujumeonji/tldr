@@ -3,7 +3,7 @@ package run.cd80.tldr.api.diary.application.port.inner
 import run.cd80.tldr.api.diary.application.port.inner.dto.CreateDailyDiary
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsByMonth
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentlyViewed
-import run.cd80.tldr.api.domain.post.Post
+import run.cd80.tldr.domain.post.Post
 
 interface PostService {
 

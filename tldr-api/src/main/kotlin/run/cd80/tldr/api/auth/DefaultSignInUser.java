@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.domain.auth;
+package run.cd80.tldr.api.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

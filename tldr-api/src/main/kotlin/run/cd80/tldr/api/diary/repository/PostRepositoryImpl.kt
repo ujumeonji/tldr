@@ -2,7 +2,7 @@ package run.cd80.tldr.api.diary.repository
 
 import org.springframework.stereotype.Repository
 import run.cd80.tldr.api.diary.application.port.out.PostRepository
-import run.cd80.tldr.api.domain.post.Post
+import run.cd80.tldr.domain.post.Post
 
 @Repository
 class PostRepositoryImpl(

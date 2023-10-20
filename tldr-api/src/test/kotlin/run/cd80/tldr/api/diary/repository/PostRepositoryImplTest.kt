@@ -7,8 +7,8 @@ import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
-import run.cd80.tldr.api.domain.post.Post
 import run.cd80.tldr.common.createAccount
+import run.cd80.tldr.domain.post.Post
 import java.time.LocalDateTime
 
 @Transactional

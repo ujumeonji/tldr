@@ -2,11 +2,11 @@ package run.cd80.tldr.api.user.application
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import run.cd80.tldr.api.domain.user.Account
 import run.cd80.tldr.api.user.application.port.inner.AccountService
 import run.cd80.tldr.api.user.application.port.inner.dto.CreateAccount
 import run.cd80.tldr.api.user.application.port.out.AccountQueryRepository
 import run.cd80.tldr.api.user.application.port.out.AccountRepository
+import run.cd80.tldr.domain.user.Account
 
 @Service
 @Transactional

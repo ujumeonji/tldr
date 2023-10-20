@@ -7,7 +7,7 @@ import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsByMonth
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsRecentlyViewed
 import run.cd80.tldr.api.diary.application.port.out.PostQueryRepository
 import run.cd80.tldr.api.diary.application.port.out.PostRepository
-import run.cd80.tldr.api.domain.post.Post
+import run.cd80.tldr.domain.post.Post
 import run.cd80.tldr.lib.calendar.Calendar
 
 @Service

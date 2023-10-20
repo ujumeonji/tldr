@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.domain.credential;
+package run.cd80.tldr.domain.credential;
 
 public enum Provider {
 

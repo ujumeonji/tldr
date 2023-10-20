@@ -47,7 +47,7 @@ class BojCrawler(
                 problemId.toLong(),
                 submittedDateTime,
                 problemTitle,
-                JudgeResult.fromString(isCollect)
+                JudgeResult.fromString(isCollect),
             )
         } catch (e: Exception) {
             null

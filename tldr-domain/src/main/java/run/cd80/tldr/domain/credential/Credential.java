@@ -1,6 +1,5 @@
-package run.cd80.tldr.api.domain.credential;
+package run.cd80.tldr.domain.credential;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -12,8 +11,8 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import run.cd80.tldr.api.domain.BaseEntity;
-import run.cd80.tldr.api.domain.user.Account;
+import run.cd80.tldr.domain.BaseEntity;
+import run.cd80.tldr.domain.user.Account;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

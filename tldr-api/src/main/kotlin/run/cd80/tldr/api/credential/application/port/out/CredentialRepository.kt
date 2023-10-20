@@ -1,6 +1,6 @@
 package run.cd80.tldr.api.credential.application.port.out
 
-import run.cd80.tldr.api.domain.credential.Credential
+import run.cd80.tldr.domain.credential.Credential
 
 interface CredentialRepository {
 
