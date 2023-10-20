@@ -7,11 +7,7 @@ import run.cd80.tldr.lib.github.dto.CreateTree
 import run.cd80.tldr.lib.github.dto.CreateTreeItem
 import run.cd80.tldr.lib.github.dto.UpdateHead
 import run.cd80.tldr.lib.github.dto.UploadFile
-import run.cd80.tldr.lib.github.response.CreateBlobResponse
-import run.cd80.tldr.lib.github.response.CreateCommitResponse
-import run.cd80.tldr.lib.github.response.CreateTreeResponse
-import run.cd80.tldr.lib.github.response.GetReferenceResponse
-import run.cd80.tldr.lib.github.response.UpdateHeadResponse
+import run.cd80.tldr.lib.github.response.*
 import run.cd80.tldr.lib.github.vo.GitBlob
 import run.cd80.tldr.lib.github.vo.GitCommit
 import run.cd80.tldr.lib.github.vo.GitRepository
@@ -26,7 +22,8 @@ class GithubManager(
 ) {
 
     suspend fun uploadFile(command: UploadFile.Command, repository: GitRepository, accessToken: GithubAccessToken) {
-        val reference = getReference(command.branch, repository, accessToken)
+        val branch = "main"
+        val reference = getReference(branch, repository, accessToken)
         val blob = createBlob(
             CreateBlob.Command(
                 content = command.content.contentData(),
@@ -60,7 +57,7 @@ class GithubManager(
         )
         updateHead(
             UpdateHead.Command(
-                branch = command.branch,
+                branch = branch,
                 sha = GitCommit.SHA(commit.sha),
                 force = true,
             ),
@@ -95,8 +92,9 @@ class GithubManager(
     ): UpdateHeadResponse {
         val response =
             httpClient.patch("https://api.github.com/repos/${repository.getFullName()}/git/refs/heads/${command.branch}") {
-                header("Accept", "application/vnd.github.v3+json")
+                header("Accept", "application/vnd.github+json")
                 header("Content-Type", "application/json; charset=utf-8")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
                 body(
                     mapOf(
@@ -116,8 +114,9 @@ class GithubManager(
     ): CreateCommitResponse {
         val response = httpClient
             .post("https://api.github.com/repos/${repository.getFullName()}/git/commits") {
-                header("Accept", "application/vnd.github.v3+json")
+                header("Accept", "application/vnd.github+json")
                 header("Content-Type", "application/json; charset=utf-8")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
                 body(
                     mapOf(
@@ -137,8 +136,9 @@ class GithubManager(
         accessToken: GithubAccessToken,
     ): CreateTreeResponse {
         val response = httpClient.post("https://api.github.com/repos/${repository.getFullName()}/git/trees") {
-            header("Accept", "application/vnd.github.v3+json")
+            header("Accept", "application/vnd.github+json")
             header("Content-Type", "application/json; charset=utf-8")
+            header("X-GitHub-Api-Version", "2022-11-28")
             header("Authorization", "Bearer $accessToken")
             body(
                 mapOf(
@@ -158,8 +158,8 @@ class GithubManager(
     ): CreateBlobResponse {
         val response = httpClient
             .post("https://api.github.com/repos/${repository.getFullName()}/git/blobs") {
-                header("Accept", "application/vnd.github.v3+json")
-                header("Content-Type", "application/json; charset=utf-8")
+                header("Accept", "application/vnd.github+json")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
                 body(
                     mapOf(
@@ -179,8 +179,9 @@ class GithubManager(
     ): GetReferenceResponse {
         val response = httpClient
             .get("https://api.github.com/repos/${repository.getFullName()}/git/ref/heads/$branch") {
-                header("Accept", "application/vnd.github.v3+json")
+                header("Accept", "application/vnd.github+json")
                 header("Content-Type", "application/json; charset=utf-8")
+                header("X-GitHub-Api-Version", "2022-11-28")
                 header("Authorization", "Bearer $accessToken")
             }
 

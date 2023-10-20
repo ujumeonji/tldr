@@ -7,7 +7,6 @@ object UploadFile {
     data class Command(
         val message: String,
         val content: GitContent,
-        val branch: String,
         val path: String,
     )
 }
