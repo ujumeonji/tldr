@@ -8,6 +8,7 @@ object GetSolutions {
     data class Command(val username: String)
 
     data class Result(
+        val solutionId: Long,
         val problemId: Long,
         val submittedTime: LocalDateTime,
         val problemTitle: String,
