@@ -43,6 +43,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: 'org.postgresql.Driver'
+    url: 'jdbc:postgresql://postgres.tldr-api.orb.local:5432/mydatabase'
+    username: 'myuser'
+    password: 'secret'
+    hikari:
+      maximum-pool-size: 5
+      max-lifetime: 1800000
+      minimum-idle: 2
+      idle-timeout: 30000
+      connection-timeout: 15000
+      leak-detection-threshold: 60000
+      pool-name: 'tldr-hikari-pool'
 
 github:
   client-id: 'test-client-id'
