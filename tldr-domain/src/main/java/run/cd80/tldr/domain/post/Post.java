@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-
 import lombok.Builder;
 import run.cd80.tldr.domain.BaseEntity;
 import run.cd80.tldr.domain.user.Account;
@@ -35,8 +34,14 @@ public class Post extends BaseEntity {
   protected Post() {}
 
   @Builder
-  public Post(Long id, String title, String content, Account account, LocalDateTime viewedAt,
-              LocalDateTime diaryAt, LocalDateTime createdAt) {
+  public Post(
+      Long id,
+      String title,
+      String content,
+      Account account,
+      LocalDateTime viewedAt,
+      LocalDateTime diaryAt,
+      LocalDateTime createdAt) {
     this.id = id;
     this.title = title;
     this.content = content;
@@ -46,7 +51,12 @@ public class Post extends BaseEntity {
     setCreatedAt(createdAt);
   }
 
-  public static Post create(String title, String content, Account account, LocalDateTime diaryAt, LocalDateTime createdAt) {
+  public static Post create(
+      String title,
+      String content,
+      Account account,
+      LocalDateTime diaryAt,
+      LocalDateTime createdAt) {
     Post post = new Post();
     post.title = title;
     post.content = content;

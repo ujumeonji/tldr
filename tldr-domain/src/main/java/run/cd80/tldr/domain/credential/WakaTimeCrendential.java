@@ -2,9 +2,6 @@ package run.cd80.tldr.domain.credential;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import run.cd80.tldr.domain.user.Account;

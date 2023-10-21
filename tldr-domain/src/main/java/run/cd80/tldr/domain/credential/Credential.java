@@ -27,8 +27,7 @@ public class Credential extends BaseEntity {
   @JoinColumn(name = "account_id", nullable = false)
   private Account account;
 
-  protected Credential() {
-  }
+  protected Credential() {}
 
   public Credential(Long id, Account account, LocalDateTime createdAt) {
     this.id = id;

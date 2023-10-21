@@ -8,7 +8,7 @@ public class AccountId {
     this.id = id;
   }
 
-  static public AccountId of(String id) {
+  public static AccountId of(String id) {
     return new AccountId(id);
   }
 

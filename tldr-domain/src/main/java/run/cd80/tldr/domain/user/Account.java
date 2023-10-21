@@ -1,17 +1,18 @@
 package run.cd80.tldr.domain.user;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.Builder;
 import org.springframework.util.Assert;
 import run.cd80.tldr.domain.BaseEntity;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Entity
-@Table(name = "account", uniqueConstraints = {
-  @UniqueConstraint(name = "uni_account_username", columnNames = "username")
-})
+@Table(
+    name = "account",
+    uniqueConstraints = {
+      @UniqueConstraint(name = "uni_account_username", columnNames = "username")
+    })
 public class Account extends BaseEntity {
 
   private static final String MAIL_SPLITTER = "@";
@@ -26,8 +27,7 @@ public class Account extends BaseEntity {
 
   private String username;
 
-  protected Account() {
-  }
+  protected Account() {}
 
   @Builder
   public Account(Long id, String email, String username, LocalDateTime createdAt) {
@@ -61,6 +61,8 @@ public class Account extends BaseEntity {
   }
 
   private static String generateUsername(String email) {
-    return email.split(MAIL_SPLITTER)[0] + USERNAME_SPLITTER + UUID.randomUUID().toString().substring(0, 8);
+    return email.split(MAIL_SPLITTER)[0]
+        + USERNAME_SPLITTER
+        + UUID.randomUUID().toString().substring(0, 8);
   }
 }
