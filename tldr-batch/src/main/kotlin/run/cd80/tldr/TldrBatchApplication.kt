@@ -1,11 +1,16 @@
 package run.cd80.tldr
 
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
 import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import kotlin.system.exitProcess
 
 @SpringBootApplication
+@EnableBatchProcessing
+@ConfigurationPropertiesScan
 class TldrBatchApplication
 
 fun main(args: Array<String>) {

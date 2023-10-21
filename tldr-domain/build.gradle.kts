@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.utils.extendsFrom
+//import org.jetbrains.kotlin.gradle.utils.extendsFrom
 
 plugins {
     id("org.springframework.boot") version "3.1.4"
@@ -9,7 +9,7 @@ plugins {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    compileOnly("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
@@ -18,20 +18,21 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
-//val queryDslFolder = "src/main/java/run/cd80/tldr/generated"
+val queryDslFolder = "$buildDir/generated/sources"
+//val javaSrcFolder = "src/main/java"
 //
 //querydsl {
 //    jpa = true
 //    querydslSourcesDir = queryDslFolder
 //}
 //
-//sourceSets {
-//    main {
-//        java {
-//            srcDir(queryDslFolder)
-//        }
-//    }
-//}
+sourceSets {
+    main {
+        java {
+            srcDir(queryDslFolder)
+        }
+    }
+}
 //
 //tasks.compileQuerydsl {
 //    options.annotationProcessorPath = configurations["querydsl"]
@@ -41,6 +42,5 @@ dependencies {
 //    compileOnly {
 //        extendsFrom(configurations.annotationProcessor.get())
 //    }
-//
 //    querydsl.extendsFrom(compileClasspath)
 //}

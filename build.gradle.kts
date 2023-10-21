@@ -34,6 +34,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
         implementation(kotlin("stdlib-jdk8"))
+        runtimeOnly("org.apache.logging.log4j:log4j-api-kotlin:1.3.0")
         testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
         testImplementation(kotlin("test-junit5"))
     }

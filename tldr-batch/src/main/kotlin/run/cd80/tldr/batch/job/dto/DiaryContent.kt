@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.diary
+package run.cd80.tldr.batch.job.dto
 
 import run.cd80.tldr.lib.crawler.boj.dto.GetSolutions
 import run.cd80.tldr.lib.github.type.EncodeType
