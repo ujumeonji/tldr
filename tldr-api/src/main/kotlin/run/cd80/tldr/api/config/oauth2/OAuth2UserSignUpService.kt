@@ -5,8 +5,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
+import run.cd80.tldr.api.auth.DefaultSignInUser
 import run.cd80.tldr.api.base.WorkflowScenario
-import run.cd80.tldr.api.domain.auth.DefaultSignInUser
 import run.cd80.tldr.api.user.workflow.dto.FindOrCreateAccount
 
 @Service

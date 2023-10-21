@@ -1,8 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.22"
+    id("org.springframework.boot") version "3.1.4"
+    id("io.spring.dependency-management") version "1.1.3"
     id("com.diffplug.spotless") version "6.22.0"
+    kotlin("jvm") version "1.9.20-RC"
 }
 
 group = "run.cd80"
@@ -28,11 +30,13 @@ subprojects {
     apply(plugin = "kotlin")
 
     dependencies {
-        implementation(kotlin("stdlib-jdk8"))
         implementation("com.google.code.gson:gson:2.10.1")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
-        testImplementation(kotlin("test-junit5"))
+        implementation(kotlin("stdlib-jdk8"))
+        runtimeOnly("org.apache.logging.log4j:log4j-api-kotlin:1.3.0")
         testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
+        testImplementation(kotlin("test-junit5"))
     }
 
     tasks.withType<KotlinCompile> {
@@ -48,6 +52,12 @@ subprojects {
 }
 
 spotless {
+    java {
+        target("**/*.java")
+        targetExclude("$buildDir/**/*.java", "bin/**/*.java")
+        googleJavaFormat("1.11.0")
+    }
+
     kotlin {
         target("**/*.kt")
         targetExclude("$buildDir/**/*.kt", "bin/**/*.kt")

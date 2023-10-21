@@ -3,9 +3,9 @@ package run.cd80.tldr.api.user.persistence
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.stereotype.Repository
-import run.cd80.tldr.api.domain.user.Account
-import run.cd80.tldr.api.user.application.port.out.AccountQueryRepository
-import run.cd80.tldr.api.user.application.port.out.AccountRepository
+import run.cd80.tldr.api.user.application.port.outer.AccountQueryRepository
+import run.cd80.tldr.api.user.application.port.outer.AccountRepository
+import run.cd80.tldr.domain.user.Account
 
 @Repository
 class AccountRepositoryImpl(

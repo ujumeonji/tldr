@@ -35,13 +35,20 @@ class BojCrawler(
     private fun getSolutionResult(it: Element): GetSolutions.Result? =
         try {
             val tdElements = it.select("td")
+            val solutionId = tdElements[0].text()
             val problemId = tdElements[2].select("a").attr("href").split("/").last()
             val problemTitle = tdElements[2].select("a").attr("title")
             val isCollect = tdElements[3].select("span").text()
             val submittedTimeText = tdElements[8].select("a").attr("data-timestamp")
             val submittedDateTime = LocalDateTime.ofEpochSecond(submittedTimeText.toLong(), 0, ZoneOffset.UTC)
 
-            GetSolutions.Result(problemId.toLong(), submittedDateTime, problemTitle, JudgeResult.fromString(isCollect))
+            GetSolutions.Result(
+                solutionId.toLong(),
+                problemId.toLong(),
+                submittedDateTime,
+                problemTitle,
+                JudgeResult.fromString(isCollect),
+            )
         } catch (e: Exception) {
             null
         }

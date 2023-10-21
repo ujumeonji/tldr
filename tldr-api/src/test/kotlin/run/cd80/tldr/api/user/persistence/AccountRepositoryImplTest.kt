@@ -7,8 +7,8 @@ import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import run.cd80.tldr.api.domain.user.Account
 import run.cd80.tldr.common.createAccount
+import run.cd80.tldr.domain.user.Account
 
 @Transactional
 @SpringBootTest
@@ -22,7 +22,7 @@ class AccountRepositoryImplTest @Autowired constructor(
         describe("save") {
             it("should persist an account") {
                 // given
-                val account = Account.signUp("test@example.com")
+                val account = entityManager.createAccount(email = "test@example.com")
 
                 // when
                 accountRepository.save(account)
@@ -35,8 +35,7 @@ class AccountRepositoryImplTest @Autowired constructor(
         describe("findByEmail") {
             it("should return an account") {
                 // given
-                val account = Account.signUp("test@example.com")
-                entityManager.persist(account)
+                val account = entityManager.createAccount(email = "test@example.com")
 
                 // when
                 val result = accountRepository.findByEmail("test@example.com")

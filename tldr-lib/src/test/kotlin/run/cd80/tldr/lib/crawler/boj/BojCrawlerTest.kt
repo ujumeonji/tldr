@@ -54,8 +54,10 @@ class BojCrawlerTest : BehaviorSpec({
 
             then("return document") {
                 results shouldHaveSize 1
+                results.first().solutionId shouldBe 67338447
                 results.first().problemId shouldBe 9610
                 results.first().submittedTime shouldBe 1695998320
+                results.first().problemTitle shouldBe "사분면"
             }
         }
     }

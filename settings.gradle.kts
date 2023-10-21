@@ -1,3 +1,3 @@
 rootProject.name = "tldr"
 
-include("tldr-api", "tldr-lib")
+include("tldr-api", "tldr-lib", "tldr-batch", "tldr-domain")

@@ -6,8 +6,8 @@ import run.cd80.tldr.api.base.WorkflowScenario
 import run.cd80.tldr.api.diary.application.port.inner.PostService
 import run.cd80.tldr.api.diary.application.port.inner.dto.FetchPostsByMonth
 import run.cd80.tldr.api.diary.workflow.dto.GetDiaryCalendar
-import run.cd80.tldr.api.domain.post.Post
-import run.cd80.tldr.api.domain.user.vo.AccountId
+import run.cd80.tldr.domain.post.Post
+import run.cd80.tldr.domain.user.vo.AccountId
 
 @Service
 class GetDiaryCalendarWorkflow(

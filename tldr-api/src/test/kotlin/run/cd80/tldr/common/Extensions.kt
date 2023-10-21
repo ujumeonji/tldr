@@ -1,12 +1,11 @@
 package run.cd80.tldr.common
 
 import jakarta.persistence.EntityManager
-import run.cd80.tldr.api.domain.credential.Credential
-import run.cd80.tldr.api.domain.credential.GithubCredential
-import run.cd80.tldr.api.domain.credential.Provider
-import run.cd80.tldr.api.domain.credential.WakaTimeCrendential
-import run.cd80.tldr.api.domain.post.Post
-import run.cd80.tldr.api.domain.user.Account
+import run.cd80.tldr.domain.credential.Credential
+import run.cd80.tldr.domain.credential.GithubCredential
+import run.cd80.tldr.domain.credential.WakaTimeCrendential
+import run.cd80.tldr.domain.post.Post
+import run.cd80.tldr.domain.user.Account
 import java.time.LocalDateTime
 
 fun EntityManager.createAccount(email: String = "test@mail.com", username: String = "test username", createdAt: LocalDateTime = LocalDateTime.now()): Account =
