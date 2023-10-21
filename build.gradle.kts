@@ -51,6 +51,12 @@ subprojects {
 }
 
 spotless {
+    java {
+        target("**/*.java")
+        targetExclude("$buildDir/**/*.java", "bin/**/*.java")
+        googleJavaFormat("1.11.0")
+    }
+
     kotlin {
         target("**/*.kt")
         targetExclude("$buildDir/**/*.kt", "bin/**/*.kt")

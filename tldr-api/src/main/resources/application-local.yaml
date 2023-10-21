@@ -46,7 +46,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     driver-class-name: 'org.postgresql.Driver'
-    url: 'jdbc:postgresql://postgres.tldr-api.orb.local:5432/mydatabase'
+    url: 'jdbc:postgresql://localhost:5432/mydatabase'
     username: 'myuser'
     password: 'secret'
     hikari:

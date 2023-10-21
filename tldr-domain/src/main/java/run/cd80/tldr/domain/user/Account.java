@@ -49,12 +49,14 @@ public class Account extends BaseEntity {
     return username;
   }
 
-  public static Account signUp(final String email) {
+  public static Account signUp(final String email, final LocalDateTime signUpAt) {
     Assert.hasText(email, "email must not be empty");
 
     Account account = new Account();
     account.username = generateUsername(email);
     account.email = email;
+    account.setCreatedAt(signUpAt);
+
     return account;
   }
 

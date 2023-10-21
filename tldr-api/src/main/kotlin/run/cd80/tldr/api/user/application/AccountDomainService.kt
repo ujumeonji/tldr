@@ -7,17 +7,19 @@ import run.cd80.tldr.api.user.application.port.inner.dto.CreateAccount
 import run.cd80.tldr.api.user.application.port.out.AccountQueryRepository
 import run.cd80.tldr.api.user.application.port.out.AccountRepository
 import run.cd80.tldr.domain.user.Account
+import run.cd80.tldr.lib.calendar.Calendar
 
 @Service
 @Transactional
 class AccountDomainService(
     private val accountRepository: AccountRepository,
     private val accountQueryRepository: AccountQueryRepository,
+    private val calendar: Calendar,
 ) : AccountService {
 
     override fun createAccount(command: CreateAccount.Command): Account =
         Account
-            .signUp(command.email)
+            .signUp(command.email, calendar.now())
             .apply(accountRepository::save)
 
     @Transactional(readOnly = true)
