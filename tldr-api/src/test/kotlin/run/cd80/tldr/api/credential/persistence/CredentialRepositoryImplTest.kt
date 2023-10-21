@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.credential.repository
+package run.cd80.tldr.api.credential.persistence
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.longs.shouldBeGreaterThan

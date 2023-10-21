@@ -1,9 +1,7 @@
 package run.cd80.tldr.batch.job
 
 import jakarta.persistence.EntityManagerFactory
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository

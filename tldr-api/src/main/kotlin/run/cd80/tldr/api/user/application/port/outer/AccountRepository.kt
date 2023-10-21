@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.user.application.port.out
+package run.cd80.tldr.api.user.application.port.outer
 
 import run.cd80.tldr.domain.user.Account
 

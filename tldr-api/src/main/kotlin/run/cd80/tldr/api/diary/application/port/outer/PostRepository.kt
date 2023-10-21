@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.diary.application.port.out
+package run.cd80.tldr.api.diary.application.port.outer
 
 import run.cd80.tldr.domain.post.Post
 

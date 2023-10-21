@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.diary.repository
+package run.cd80.tldr.api.diary.persistence
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize

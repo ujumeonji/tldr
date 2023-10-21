@@ -1,7 +1,7 @@
-package run.cd80.tldr.api.credential.repository
+package run.cd80.tldr.api.credential.persistence
 
 import org.springframework.stereotype.Repository
-import run.cd80.tldr.api.credential.application.port.out.CredentialRepository
+import run.cd80.tldr.api.credential.application.port.outer.CredentialRepository
 import run.cd80.tldr.domain.credential.Credential
 
 @Repository

@@ -1,4 +1,4 @@
-package run.cd80.tldr.api.credential.application.port.out
+package run.cd80.tldr.api.credential.application.port.outer
 
 import run.cd80.tldr.domain.credential.Credential
 

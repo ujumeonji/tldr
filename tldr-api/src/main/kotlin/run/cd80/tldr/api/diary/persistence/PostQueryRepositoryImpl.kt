@@ -1,8 +1,8 @@
-package run.cd80.tldr.api.diary.repository
+package run.cd80.tldr.api.diary.persistence
 
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
-import run.cd80.tldr.api.diary.application.port.out.PostQueryRepository
+import run.cd80.tldr.api.diary.application.port.outer.PostQueryRepository
 import run.cd80.tldr.domain.post.Post
 import run.cd80.tldr.domain.user.vo.AccountId
 import java.time.LocalDateTime
