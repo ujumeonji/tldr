@@ -12,11 +12,13 @@ import org.springframework.batch.item.database.JdbcPagingItemReader
 import org.springframework.batch.item.database.Order
 import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.DataClassRowMapper
 import org.springframework.transaction.PlatformTransactionManager
 import run.cd80.tldr.batch.config.GithubClientConfig
+import run.cd80.tldr.batch.extend.toDate
 import run.cd80.tldr.batch.job.dto.AlgorithmDto
 import run.cd80.tldr.batch.job.dto.DiaryContent
 import run.cd80.tldr.batch.listerner.ReaderFailureListener
@@ -30,6 +32,7 @@ import run.cd80.tldr.lib.github.dto.UploadFile
 import run.cd80.tldr.lib.github.vo.GitRepository
 import run.cd80.tldr.lib.github.vo.GithubAccessToken
 import run.cd80.tldr.lib.http.HttpClient
+import java.time.LocalDate
 import javax.sql.DataSource
 
 @Configuration
@@ -65,7 +68,7 @@ class AlgorithmBatchJobConfig(
     fun algorithmBatchStep() = StepBuilder(STEP_NAME, jobRepository)
         .chunk<AlgorithmDto, AlgorithmDto>(CHUNK_SIZE, platformTransactionManager)
         .reader(algorithmBatchReader())
-        .processor(algorithmBatchProcessor())
+        .processor(algorithmBatchProcessor(null))
         .writer(algorithmBatchWriter())
         .listener(ReaderFailureListener { ex -> "algorithmBatchReader: ${ex.message}" })
         .listener(WriterFailureListener { ex, _ -> "algorithmBatchWriter: ${ex.message}" })
@@ -88,18 +91,26 @@ class AlgorithmBatchJobConfig(
 
     @Bean(PROCESSOR_NAME)
     @StepScope
-    fun algorithmBatchProcessor(): ItemProcessor<in AlgorithmDto, out AlgorithmDto> =
+    fun algorithmBatchProcessor(@Value("#{jobParameters[requestDate]}") requestDate: String?): ItemProcessor<in AlgorithmDto, out AlgorithmDto> =
         ItemProcessor { credential ->
             runBlocking {
-                val nowDate = calendar.now().toLocalDate()
+                val nowDate = requestDate?.toDate() ?: LocalDate.now()
                 val solutions = bojCrawler.getSolution(
                     GetSolutions.Command(credential.username),
-                )
+                ).apply {
+                    filter {
+                        it.submittedTime.toLocalDate() == nowDate
+                    }
+                }
+
+                if (solutions.isEmpty()) {
+                    return@runBlocking credential
+                }
 
                 githubManager.uploadFile(
                     UploadFile.Command(
                         "오늘의 일기 $nowDate",
-                        DiaryContent(solutions),
+                        DiaryContent(solutions, nowDate),
                         "diary/${nowDate.year}/${nowDate.monthValue}/${nowDate.dayOfMonth}.md",
                     ),
                     GitRepository.of(credential.owner, credential.repository),
