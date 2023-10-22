@@ -106,7 +106,7 @@ class AlgorithmBatchJobConfig(
                         UploadFile.Command(
                             "오늘의 일기 $nowDate",
                             DiaryContent(solutions, nowDate),
-                            "diary/${nowDate.year}/${nowDate.monthValue}/${nowDate.dayOfMonth}.md",
+                            "일기장/${nowDate.year}/${nowDate.monthValue}/${nowDate.dayOfMonth}.md",
                         ),
                         GitRepository.of(credential.owner, credential.repository),
                         GithubAccessToken.of(credential.accessToken),
