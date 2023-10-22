@@ -11,10 +11,12 @@ object RegisterProvider {
         private val provider: String,
         private val apiKey: String?,
         private val accessToken: String?,
+        private val owner: String?,
+        private val repository: String?,
     ) {
 
         fun toCommand(account: Account) = when (provider) {
-            "github" -> GithubRegistryCommand(account, accessToken!!)
+            "github" -> GithubRegistryCommand(account, accessToken!!, owner!!, repository!!)
             "wakatime" -> WakatimeRegistryCommand(account, apiKey!!)
             else -> throw IllegalArgumentException("Invalid provider: $provider")
         }

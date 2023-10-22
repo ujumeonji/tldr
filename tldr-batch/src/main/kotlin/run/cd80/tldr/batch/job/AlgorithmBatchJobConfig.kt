@@ -1,7 +1,5 @@
 package run.cd80.tldr.batch.job
 
-import com.querydsl.core.types.Projections
-import jakarta.persistence.EntityManagerFactory
 import kotlinx.coroutines.runBlocking
 import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepScope
@@ -9,19 +7,20 @@ import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.item.ItemProcessor
-import org.springframework.batch.item.ItemStreamReader
 import org.springframework.batch.item.ItemWriter
+import org.springframework.batch.item.database.JdbcPagingItemReader
+import org.springframework.batch.item.database.Order
+import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.jdbc.core.DataClassRowMapper
 import org.springframework.transaction.PlatformTransactionManager
 import run.cd80.tldr.batch.config.GithubClientConfig
 import run.cd80.tldr.batch.job.dto.AlgorithmDto
 import run.cd80.tldr.batch.job.dto.DiaryContent
 import run.cd80.tldr.batch.listerner.ReaderFailureListener
 import run.cd80.tldr.batch.listerner.WriterFailureListener
-import run.cd80.tldr.batch.reader.QueryDSLPagingItemReader
-import run.cd80.tldr.domain.challenge.QBojChallenge.bojChallenge
-import run.cd80.tldr.domain.credential.QGithubCredential.githubCredential
 import run.cd80.tldr.lib.calendar.Calendar
 import run.cd80.tldr.lib.crawler.boj.BojCrawler
 import run.cd80.tldr.lib.crawler.boj.dto.GetSolutions
@@ -31,13 +30,14 @@ import run.cd80.tldr.lib.github.dto.UploadFile
 import run.cd80.tldr.lib.github.vo.GitRepository
 import run.cd80.tldr.lib.github.vo.GithubAccessToken
 import run.cd80.tldr.lib.http.HttpClient
+import javax.sql.DataSource
 
 @Configuration
 class AlgorithmBatchJobConfig(
     private val jobRepository: JobRepository,
     private val platformTransactionManager: PlatformTransactionManager,
-    private val entityManagerFactory: EntityManagerFactory,
     private val calendar: Calendar,
+    private val dataSource: DataSource,
     githubClientConfig: GithubClientConfig,
     httpClient: HttpClient,
 ) {
@@ -50,7 +50,7 @@ class AlgorithmBatchJobConfig(
             githubClientConfig.clientId,
             githubClientConfig.clientSecret,
             githubClientConfig.redirectUri,
-            githubClientConfig.scopes
+            githubClientConfig.scopes,
         ),
     )
 
@@ -76,21 +76,15 @@ class AlgorithmBatchJobConfig(
 
     @Bean(READER_NAME)
     @StepScope
-    fun algorithmBatchReader(): ItemStreamReader<AlgorithmDto> =
-        QueryDSLPagingItemReader(entityManagerFactory, CHUNK_SIZE) { queryFactory ->
-            queryFactory
-                .select(
-                    Projections.constructor(
-                        AlgorithmDto::class.java,
-                        bojChallenge.username,
-                        githubCredential.username.`as`("owner"),
-                        githubCredential.repository,
-                        githubCredential.accessToken
-                    )
-                )
-                .from(bojChallenge)
-                .innerJoin(githubCredential).on(githubCredential.account.eq(bojChallenge.account))
-        }
+    fun algorithmBatchReader(): JdbcPagingItemReader<AlgorithmDto> =
+        JdbcPagingItemReaderBuilder<AlgorithmDto>()
+            .name("courseDurationSyncBatchReader")
+            .pageSize(CHUNK_SIZE)
+            .fetchSize(CHUNK_SIZE)
+            .dataSource(dataSource)
+            .queryProvider(createQueryProvider())
+            .rowMapper(DataClassRowMapper(AlgorithmDto::class.java))
+            .build()
 
     @Bean(PROCESSOR_NAME)
     @StepScope
@@ -119,6 +113,27 @@ class AlgorithmBatchJobConfig(
     @Bean(WRITER_NAME)
     @StepScope
     fun algorithmBatchWriter() = ItemWriter<AlgorithmDto> { }
+
+    private fun createQueryProvider() = SqlPagingQueryProviderFactoryBean().apply {
+        setDataSource(dataSource)
+        setSelectClause(
+            """
+                b.id as id,
+                b.username as username, 
+                g.username as owner, 
+                g.repository as repository, 
+                g.access_token as access_token
+            """.trimIndent(),
+        )
+        setFromClause(
+            """
+                from boj_challenge b
+                join github_credential g on g.account_id = b.account_id
+            """.trimIndent(),
+        )
+        setWhereClause("b.deleted_at is null")
+        setSortKeys(mapOf("id" to Order.DESCENDING))
+    }.`object`
 
     companion object {
 

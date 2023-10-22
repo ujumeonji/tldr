@@ -7,6 +7,8 @@ object CreateCredentialDto {
     data class Request(
         val provider: String,
         val accessToken: String?,
+        val owner: String?,
+        val repository: String?,
         val apiKey: String?,
     ) {
 
@@ -16,6 +18,8 @@ object CreateCredentialDto {
                 provider = provider,
                 accessToken = accessToken,
                 apiKey = apiKey,
+                owner = owner,
+                repository = repository,
             )
     }
 

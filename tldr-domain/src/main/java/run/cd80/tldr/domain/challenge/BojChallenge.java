@@ -4,7 +4,6 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import lombok.Builder;
-import run.cd80.tldr.domain.credential.Credential;
 import run.cd80.tldr.domain.user.Account;
 
 @Entity

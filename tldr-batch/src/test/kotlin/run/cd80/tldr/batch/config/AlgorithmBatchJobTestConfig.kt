@@ -1,7 +1,5 @@
 package run.cd80.tldr.batch.config
 
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import run.cd80.tldr.lib.calendar.Calendar
@@ -10,8 +8,7 @@ import run.cd80.tldr.lib.http.impl.FuelHttpClient
 import java.time.LocalDateTime
 
 @TestConfiguration
-@EnableAutoConfiguration
-class BatchTestConfig {
+class AlgorithmBatchJobTestConfig {
 
     @Bean
     fun testCalendar(): Calendar =

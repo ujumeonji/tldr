@@ -1,4 +1,4 @@
-package run.cd80.tldr.batch.config
+package run.cd80.tldr.api.config
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 class QueryDSLConfig {
 
     @Bean
-    fun jpaQueryFactory(entityManager: EntityManager): JPAQueryFactory =
+    fun paQueryFactory(entityManager: EntityManager): JPAQueryFactory =
         JPAQueryFactory(entityManager)
 }

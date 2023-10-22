@@ -6,10 +6,11 @@ import org.springframework.batch.test.context.SpringBatchTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import run.cd80.tldr.batch.config.BatchTestConfig
+import run.cd80.tldr.batch.config.AlgorithmBatchJobTestConfig
+import run.cd80.tldr.batch.config.DatabaseTestConfig
 
 @SpringBatchTest
-@SpringBootTest(classes = [AlgorithmBatchJobConfig::class, BatchTestConfig::class])
+@SpringBootTest(classes = [AlgorithmBatchJobConfig::class, AlgorithmBatchJobTestConfig::class, DatabaseTestConfig::class])
 @ActiveProfiles("test")
 class AlgorithmBatchJobConfigTest @Autowired constructor(
     private val jobLauncherTestUtils: JobLauncherTestUtils,
