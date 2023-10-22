@@ -1,6 +1,8 @@
 package run.cd80.tldr.batch.job
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import org.springframework.batch.core.JobParametersBuilder
 import org.springframework.batch.test.JobLauncherTestUtils
 import org.springframework.batch.test.context.SpringBatchTest
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +21,17 @@ class AlgorithmBatchJobConfigTest @Autowired constructor(
     init {
 
         "알고리즘 배치 잡을 실행한다" {
-            jobLauncherTestUtils.launchJob()
+            // given
+            val jobParameters =
+                JobParametersBuilder()
+                    .addString("date", "20221024")
+                    .toJobParameters()
+
+            // when
+            val result = jobLauncherTestUtils.launchJob(jobParameters)
+
+            // then
+            result.exitStatus.exitCode shouldBe "COMPLETED"
         }
     }
 }

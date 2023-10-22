@@ -8,5 +8,5 @@ fun String.toDate(): LocalDate =
 
 object LocalDateExtend {
 
-        val FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 }

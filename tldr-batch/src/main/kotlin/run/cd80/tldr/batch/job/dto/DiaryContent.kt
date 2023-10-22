@@ -39,7 +39,7 @@ class DiaryContent(
         solutions.joinToString("\n") {
             "| [${it.solutionId}](https://www.acmicpc.net/source/${it.solutionId}) | ${it.problemId} | ${it.problemTitle} | ${
                 convertToBadge(
-                    it.judgeResult
+                    it.judgeResult,
                 )
             } | ${convertToYYYYmmDD(it.submittedTime)} |"
         }

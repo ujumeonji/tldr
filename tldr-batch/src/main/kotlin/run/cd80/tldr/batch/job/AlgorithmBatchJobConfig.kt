@@ -97,25 +97,21 @@ class AlgorithmBatchJobConfig(
                 val nowDate = requestDate?.toDate() ?: LocalDate.now()
                 val solutions = bojCrawler.getSolution(
                     GetSolutions.Command(credential.username),
-                ).apply {
-                    filter {
-                        it.submittedTime.toLocalDate() == nowDate
-                    }
+                ).filter {
+                    it.submittedTime.toLocalDate() == nowDate
                 }
 
-                if (solutions.isEmpty()) {
-                    return@runBlocking credential
+                if (solutions.isNotEmpty()) {
+                    githubManager.uploadFile(
+                        UploadFile.Command(
+                            "오늘의 일기 $nowDate",
+                            DiaryContent(solutions, nowDate),
+                            "diary/${nowDate.year}/${nowDate.monthValue}/${nowDate.dayOfMonth}.md",
+                        ),
+                        GitRepository.of(credential.owner, credential.repository),
+                        GithubAccessToken.of(credential.accessToken),
+                    )
                 }
-
-                githubManager.uploadFile(
-                    UploadFile.Command(
-                        "오늘의 일기 $nowDate",
-                        DiaryContent(solutions, nowDate),
-                        "diary/${nowDate.year}/${nowDate.monthValue}/${nowDate.dayOfMonth}.md",
-                    ),
-                    GitRepository.of(credential.owner, credential.repository),
-                    GithubAccessToken.of(credential.accessToken),
-                )
             }
 
             credential
