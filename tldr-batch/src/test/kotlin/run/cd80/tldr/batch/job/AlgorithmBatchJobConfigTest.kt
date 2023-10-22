@@ -1,0 +1,24 @@
+package run.cd80.tldr.batch.job
+
+import io.kotest.core.spec.style.StringSpec
+import org.springframework.batch.test.JobLauncherTestUtils
+import org.springframework.batch.test.context.SpringBatchTest
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import run.cd80.tldr.batch.config.BatchTestConfig
+
+@SpringBatchTest
+@SpringBootTest(classes = [AlgorithmBatchJobConfig::class, BatchTestConfig::class])
+@ActiveProfiles("test")
+class AlgorithmBatchJobConfigTest @Autowired constructor(
+    private val jobLauncherTestUtils: JobLauncherTestUtils,
+) : StringSpec() {
+
+    init {
+
+        "알고리즘 배치 잡을 실행한다" {
+            jobLauncherTestUtils.launchJob()
+        }
+    }
+}

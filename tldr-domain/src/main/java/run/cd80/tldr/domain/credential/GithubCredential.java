@@ -12,20 +12,28 @@ public class GithubCredential extends Credential {
 
   private String accessToken;
 
+  private String username;
+
+  private String repository;
+
   protected GithubCredential() {
     super();
   }
 
   @Builder
-  public GithubCredential(Long id, Account account, String accessToken, LocalDateTime createdAt) {
+  public GithubCredential(Long id, Account account, String accessToken, String username, String repository, LocalDateTime createdAt) {
     super(id, account, createdAt);
     this.accessToken = accessToken;
+    this.username = username;
+    this.repository = repository;
   }
 
-  public static GithubCredential of(Account account, String accessToken) {
+  public static GithubCredential of(Account account, String accessToken, String username, String repository) {
     GithubCredential credential = new GithubCredential();
-    credential.accessToken = accessToken;
     credential.setAccount(account);
+    credential.accessToken = accessToken;
+    credential.username = username;
+    credential.repository = repository;
 
     return credential;
   }

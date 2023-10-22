@@ -8,7 +8,6 @@ import org.springframework.boot.runApplication
 import kotlin.system.exitProcess
 
 @SpringBootApplication
-@EnableBatchProcessing
 @ConfigurationPropertiesScan
 class TldrBatchApplication
 
