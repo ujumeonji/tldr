@@ -25,4 +25,8 @@ public class BojChallenge extends Challenge {
   public static BojChallenge of(Account account, String username, LocalDateTime createdAt) {
     return BojChallenge.builder().account(account).username(username).createdAt(createdAt).build();
   }
+
+  public void update(String username) {
+    this.username = username;
+  }
 }

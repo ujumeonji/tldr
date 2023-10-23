@@ -59,7 +59,7 @@ class SecurityConfig(
             .oauth2Login { oAuth2LoginConfigurer ->
                 oAuth2LoginConfigurer
                     .authorizationEndpoint {
-                        it.baseUri("/auth/oauth2")
+                        it.baseUri("/oauth2")
                     }
                     .userInfoEndpoint {
                         it.userService(oauth2UserSignUpService)

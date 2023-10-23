@@ -34,14 +34,16 @@ public class GithubCredential extends Credential {
     this.repository = repository;
   }
 
-  public static GithubCredential of(
-      Account account, String accessToken, String username, String repository) {
+  public static GithubCredential of(Account account, String accessToken) {
     GithubCredential credential = new GithubCredential();
     credential.setAccount(account);
     credential.accessToken = accessToken;
-    credential.username = username;
-    credential.repository = repository;
 
     return credential;
+  }
+
+  public void update(String username, String repository) {
+    this.username = username;
+    this.repository = repository;
   }
 }

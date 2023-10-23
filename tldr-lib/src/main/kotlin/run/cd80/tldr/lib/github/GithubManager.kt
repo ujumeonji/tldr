@@ -82,7 +82,7 @@ class GithubManager(
             )
         }
 
-        return run.cd80.tldr.lib.github.GithubManager.Companion.ACCESS_TOKEN_REGEX
+        return ACCESS_TOKEN_REGEX
             .find(response.body)
             ?.groupValues?.get(1)
             ?.let(GithubAccessToken::of)
