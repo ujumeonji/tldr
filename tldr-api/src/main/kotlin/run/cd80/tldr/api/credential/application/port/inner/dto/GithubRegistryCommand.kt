@@ -7,11 +7,9 @@ import run.cd80.tldr.domain.user.Account
 data class GithubRegistryCommand(
     private val account: Account,
     private val accessToken: String,
-    private val username: String,
-    private val repository: String,
 ) : RegistryCommand {
 
     override fun toEntity(): Credential {
-        return GithubCredential.of(account, accessToken, username, repository)
+        return GithubCredential.of(account, accessToken)
     }
 }
