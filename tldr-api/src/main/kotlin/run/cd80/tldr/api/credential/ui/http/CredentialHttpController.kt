@@ -24,7 +24,7 @@ class CredentialHttpController(
         @Valid @RequestParam createGithubCredentialDto: CreateGithubCredentialDto.Request,
         @AuthenticationPrincipal signInUser: DefaultSignInUser,
     ): String {
-        val credential = createGithubCredentialWorkflow.execute(
+        createGithubCredentialWorkflow.execute(
             CreateGithubCredential.Request(
                 signInUser.name,
                 createGithubCredentialDto.code,
