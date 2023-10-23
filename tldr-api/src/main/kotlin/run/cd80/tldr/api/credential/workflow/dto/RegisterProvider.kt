@@ -1,7 +1,7 @@
 package run.cd80.tldr.api.credential.workflow.dto
 
-import run.cd80.tldr.api.challenge.port.inner.dto.GithubRegistryCommand
-import run.cd80.tldr.api.challenge.port.inner.dto.WakatimeRegistryCommand
+import run.cd80.tldr.api.credential.application.port.inner.dto.GithubRegistryCommand
+import run.cd80.tldr.api.credential.application.port.inner.dto.WakatimeRegistryCommand
 import run.cd80.tldr.domain.user.Account
 
 object RegisterProvider {
