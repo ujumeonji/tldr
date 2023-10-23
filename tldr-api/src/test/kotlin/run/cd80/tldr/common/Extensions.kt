@@ -44,4 +44,11 @@ fun EntityManager.createBojChallenge(
     nickname: String = "test-nickname",
     createdAt: LocalDateTime = LocalDateTime.now()
 ): BojChallenge =
-    BojChallenge.builder().account(account).username(nickname).createdAt(createdAt).build().also { this.persist(it) }
+    makeBojChallenge(account, nickname, createdAt).also { this.persist(it) }
+
+fun EntityManager.makeBojChallenge(
+    account: Account,
+    nickname: String = "test-nickname",
+    createdAt: LocalDateTime = LocalDateTime.now()
+): BojChallenge =
+    BojChallenge.builder().account(account).username(nickname).createdAt(createdAt).build()
