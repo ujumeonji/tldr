@@ -363,7 +363,6 @@ class GithubManagerTest : DescribeSpec({
                 UploadFile.Command(
                     "커밋 테스트",
                     StubGitContent(),
-                    "main",
                     "test/README.md",
                 ),
                 GitRepository.of("test", "git-test"),
