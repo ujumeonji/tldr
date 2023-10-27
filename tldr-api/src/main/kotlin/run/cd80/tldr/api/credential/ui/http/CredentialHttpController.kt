@@ -21,7 +21,7 @@ class CredentialHttpController(
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/github/callback")
     fun createGithubCredential(
-        @Valid @RequestParam createGithubCredentialDto: CreateGithubCredentialDto.Request,
+        @Valid createGithubCredentialDto: CreateGithubCredentialDto.Request,
         @AuthenticationPrincipal signInUser: DefaultSignInUser,
     ): String {
         createGithubCredentialWorkflow.execute(

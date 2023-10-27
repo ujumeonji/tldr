@@ -71,13 +71,13 @@ class GithubManager(
     }
 
     suspend fun getAccessToken(code: GithubCode): GithubAccessToken {
-        val response = httpClient.post(run.cd80.tldr.lib.github.GithubManager.Companion.GITHUB_ACCESS_TOKEN_URL) {
+        val response = httpClient.post(GITHUB_ACCESS_TOKEN_URL) {
             header("Content-Type", "application/json; charset=utf-8")
             body(
                 mapOf(
                     "client_id" to option.clientId,
                     "client_secret" to option.clientSecret,
-                    "code" to code,
+                    "code" to "$code",
                 ),
             )
         }

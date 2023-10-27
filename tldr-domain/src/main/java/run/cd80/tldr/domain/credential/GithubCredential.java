@@ -4,6 +4,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import lombok.Builder;
+import org.springframework.cglib.core.Local;
 import run.cd80.tldr.domain.user.Account;
 
 @Entity
@@ -34,10 +35,11 @@ public class GithubCredential extends Credential {
     this.repository = repository;
   }
 
-  public static GithubCredential of(Account account, String accessToken) {
+  public static GithubCredential of(Account account, String accessToken, LocalDateTime createdAt) {
     GithubCredential credential = new GithubCredential();
     credential.setAccount(account);
     credential.accessToken = accessToken;
+    credential.setCreatedAt(createdAt);
 
     return credential;
   }
@@ -45,5 +47,9 @@ public class GithubCredential extends Credential {
   public void update(String username, String repository) {
     this.username = username;
     this.repository = repository;
+  }
+
+  public void updateCredential(String accessToken) {
+    this.accessToken = accessToken;
   }
 }
